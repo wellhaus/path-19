@@ -42,6 +42,8 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     //   locations: *some function to execute SQL query*
+  },
+  Mutation: {
     //   addLocation: *some function to execute SQL query*
   },
 };
