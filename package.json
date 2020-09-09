@@ -11,9 +11,15 @@
     "type": "git",
     "url": "git+https://github.com/wellhaus/path-19.git"
   },
-  "keywords": [],
+  "keywords": [
+    "COVID-19",
+    "coronavirus",
+    "pandemic",
+    "tracing",
+    "tracker"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/wellhaus/path-19/issues"
   },
@@ -21,9 +27,11 @@
   "dependencies": {
     "apollo-server": "^2.17.0",
     "apollo-server-express": "^2.17.0",
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "express-graphql": "^0.11.0",
     "graphql": "^15.3.0",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.3"
   }
 }
