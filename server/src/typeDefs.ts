@@ -2,7 +2,7 @@
 const { gql } = require('apollo-server');
 
 // Define shape of data as types
-const typeDefs = gql`
+export const typeDefs = gql`
   type User {
     id: Int!
     email: String
@@ -33,5 +33,4 @@ const typeDefs = gql`
     login(email: String!, password: String!): LoginResponse
   }
 `;
-
-export default typeDefs;
+// module.exports = typeDefs;

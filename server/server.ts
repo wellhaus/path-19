@@ -1,8 +1,12 @@
 // const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const typeDefs = require('./src/typeDefs');
-const resolvers = require('./src/resolvers');
-const getUser = require('./src/utils');
+// import { ApolloServer } from 'apollo-server';
+const { ApolloServer } = require('apollo-server')
+// const typeDefs = require('./src/typeDefs');
+// const resolvers = require('./src/resolvers.ts');
+// const getUser = require('./src/utils.ts');
+import { typeDefs } from './src/typeDefs';
+import { resolvers } from './src/resolvers';
+import { getUser } from './src/utils';
 
 const PORT = 4000;
 
@@ -12,7 +16,7 @@ const PORT = 4000;
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }: any) => {
+  context: ({ req }) => {
     const tokenWithBearer = req.headers.authorization || '';
     const token = tokenWithBearer.split(' ')[1];
     const user = getUser(token);
