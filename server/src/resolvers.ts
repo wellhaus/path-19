@@ -1,7 +1,9 @@
 // import * as bcrypt from "bcryptjs";
 const jwt = require('jsonwebtoken');
 const model = require('./model.js');
-// import { TOKEN_SECRET } from "../env";
+require('dotenv').config();
+// const TOKEN_SECRET = process.env
+
 // Resolvers define the technique for fetching the types defined in the
 // schema.
 const resolvers = {
