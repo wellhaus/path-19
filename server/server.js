@@ -1,12 +1,12 @@
-const express = require('express');
+// const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
-const typeDefs = require('./schema/typeDefs');
-const resolvers = require('./schema/resolvers');
-const getUser = require('./schema/utils');
+const typeDefs = require('./src/typeDefs');
+const resolvers = require('./src/resolvers');
+const getUser = require('./src/utils');
 
 const PORT = 4000;
 
-const app = express();
+// const app = express();
 
 // Connect to ApolloServer
 const server = new ApolloServer({
@@ -20,7 +20,7 @@ const server = new ApolloServer({
   },
 });
 // Apply express as middleware
-server.applyMiddleware({ app, path: '/graphql' });
+// server.applyMiddleware({ app, path: '/graphql' });
 
 /* Express error handlers – potentially remove */
 // // Error handler - 404 catch-all

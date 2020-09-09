@@ -1,4 +1,5 @@
 // import * as bcrypt from "bcryptjs";
+const model = require('./model.js');
 const jwt = require('jsonwebtoken');
 // import { TOKEN_SECRET } from "../env";
 // Resolvers define the technique for fetching the types defined in the

@@ -7,7 +7,7 @@ const typeDefs = gql`
     id: Int!
     email: String
     locations: [Location]
-    jwt: String
+    # jwt: String
   }
 
   type Location {
