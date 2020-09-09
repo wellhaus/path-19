@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 // import secret from DOTENV here
 
-const getUser = (token) => {
+const getUser = (token: any) => {
   try {
     if (token) {
       return jwt.verify(token, SECRET);

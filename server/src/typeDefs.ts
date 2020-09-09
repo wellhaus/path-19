@@ -16,7 +16,7 @@ const typeDefs = gql`
     latitude: Int!
     timestamp: Int
   }
-
+# Send LoginResponse rather than user, so client can save token for additional requests
   type LoginResponse {
     token: String
     user: User
@@ -24,11 +24,12 @@ const typeDefs = gql`
   # type Query defines all top-level entry points for queries that clients can execute
   type Query {
     locations: [Location]
+    currentUser: User!
   }
   # Mutation type defines entry points for write operations
   type Mutation {
     addLocation(longitude: Int, latitude: Int, timestamp: Int): Location
-    register(email: String!, password: String!): User
+    register(email: String!, password: String!): LoginResponse
     login(email: String!, password: String!): LoginResponse
   }
 `;

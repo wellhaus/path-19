@@ -1,6 +1,6 @@
 // import * as bcrypt from "bcryptjs";
-const model = require('./model.js');
 const jwt = require('jsonwebtoken');
+const model = require('./model.js');
 // import { TOKEN_SECRET } from "../env";
 // Resolvers define the technique for fetching the types defined in the
 // schema.
@@ -21,8 +21,8 @@ const resolvers = {
     //  *find user in db so we can sign the JWT with their id*
     //  const user = await model.query(findQuery, [username]);
     // * add token to user - not sure that we'll need this *
-    // user.jwt = jwt.sign({ _id: user._id }, TOKEN_SECRET);
-    // return user;
+    // const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
+    // return { token, user };
     /* Login */
     //  login: async (root, {email, password}) => {
     // * find user in db *
