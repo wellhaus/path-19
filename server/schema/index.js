@@ -35,10 +35,6 @@ export const typeDefs = gql`
   type Mutation {
     addLocation(longitude: Int, latitude: Int, timestamp: Int): Location
   }
-
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
 `;
 
 // Resolvers define the technique for fetching the types defined in the
@@ -46,5 +42,6 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     //   locations: *some function to execute SQL query*
+    //   addLocation: *some function to execute SQL query*
   },
 };
