@@ -70,22 +70,21 @@ export const resolvers = {
     }
   },
   Mutation: {
-    /* Add a Location 
-          client-side mutation will look something like:
-                mutation addLocation {
-                 updateUserEmail(name: 'Benny', longitude: '234234.24, 
-                 latitude: 23523.9023, onset: '2020-06-06', 
-                 dateVisited: '2020-06-01'){
-              }
-      }
-    */
+    // client-side mutation will look something like:
+    // mutation addLocation {
+    //   addLocation(name: 'Benny',
+    //   latitude: 23523.9023,
+    //   longitude: '234234.24, 
+    //   onset: '2020-06-06', 
+    //   dateVisited: '2020-06-01')
+    // }
 
     // data is an object that contains all GraphQL arguments provided for this field
     addLocation: async (root, data) => {
-      const { name, longitude, latitude, onset, dateVisited } = data;
+      const { name, latitude, longitude, onset, dateVisited } = data;
       const queryText = `INSERT INTO 
-                            Locations (name, latitude, longitude, onset, dateVisited) 
-                            VALUES ($1, $2, $3, $4, $5)`;
+                        Locations (name, latitude, longitude, onset, dateVisited) 
+                        VALUES ($1, $2, $3, $4, $5)`;
       try {
         await model.query(queryText, [name, latitude, longitude, onset, dateVisited]);
       } catch (err) {
@@ -94,15 +93,22 @@ export const resolvers = {
       }
     },
 
+    // client-side mutation will look something like:
+    // mutation addLocation {
+    //   updateUserEmail(name: 'Benny', longitude: '234234.24, 
+    //   latitude: 23523.9023, onset: '2020-06-06', 
+    //   dateVisited: '2020-06-01'){
+    // } 
     deleteLocation: async (root, data) => {
       const { _id } = data;
-      const queryText = `DELETE `
+      const queryText = `DELETE FROM public.locations
+                        WHERE locations._id = ${_id};`
 
       try {
         await model.query(queryText, _id);
       } catch (err) {
         console.log('Error in deleteLocation resolver: ', err);
-
+        return err;
       }
 
 
