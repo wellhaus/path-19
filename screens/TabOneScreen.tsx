@@ -6,16 +6,9 @@ import * as Location from 'expo-location';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import Layout from '../constants/Layout';
-import Tooltip from '../components/Tooltip';
+import Tooltip, { TooltipProps } from '../components/Tooltip';
+import LoadingView from '../components/LoadingView';
 
-interface NativeCoords {
-  latitude: Number,
-  longitude: Number,
-  altitude: Number,
-  accuracy: Number,
-  heading: Number,
-  speed: Number,
-}
 interface LocationSchema {
   name: string,
   lat: number,
@@ -24,43 +17,10 @@ interface LocationSchema {
 }
 
 export default function TabOneScreen() {
-  const [location, setLocation] = useState({
-    coords: {
-      latitude: 0,
-      longitude: 0,
-      altitude: 0,
-      accuracy: 0,
-      heading: 0,
-      speed: 0,
-    },
-    timestamp: 0,
-  });
+  const [location, setLocation] = useState<Location.LocationData | null>(null);
   const [address, setAddress] = useState<string>('Waiting...');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [allLocations, setAllLocations] = useState<LocationSchema[]>([]);
-
-  const markerList: any = [];
-  // const getAllMarkers = () => {
-  //   /* SOME ASYNC FETCH REQUEST */
-  //   // Extract all data from given location objects
-  //   locations.forEach(({ name, lat, long }, index) => {
-  //     // Pass location data into Marker components in a markers array
-  //     markerList.push(
-  //       <Marker
-  //         coordinate={{ latitude: lat, longitude: long }}
-  //         title={name}
-  //         key={"markerKey" + index}
-  //       >
-  //         <Callout tooltip>
-  //           <Tooltip location={location} styles={styles} />
-  //         </Callout>
-  //       </Marker>
-  //     );
-
-  //     setMarkers(markerList);
-  //     console.log("MARKERS: ", markers);
-  //   });
-  // }
 
   const getReadableLocation = async ({ coords }: Location.LocationData) => {
     const { latitude, longitude } = coords;
@@ -79,14 +39,13 @@ export default function TabOneScreen() {
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
       }
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      setLocation(await Location.getCurrentPositionAsync({}));
     })();
 
-    // Populate markerList with Marker components to render in MapView
-    // getAllMarkers();
-    setAllLocations([{ name: 'In the ocean', lat: 37.3246316, long: -122.02508477, timestamp: 1599670918 },
-    { name: 'Los Angeles', lat: 34.0522, long: 118.2437, timestamp: 1599670918 },
+    // Populate locations array with all data form server
+    // TODO: lazy load locations
+    setAllLocations([{ name: 'Dallas', lat: 32.7767, long: 96.7970, timestamp: 1599670918 },
+    { name: 'Salt & Straw Venice', lat: 33.9908, long: 118.4660, timestamp: 1599670918 },
     { name: 'Miami', lat: 25.7617, long: 80.1918, timestamp: 1599670918 },
     { name: 'San Francisco', lat: 37.7749, long: -122.4194, timestamp: 1599670918 }
     ]);
@@ -108,37 +67,37 @@ export default function TabOneScreen() {
 
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <MapView style={styles.mapStyle}>
-        {/* <Marker
-          coordinate={{ latitude: 37.7749, longitude: -122.4194 }}
-          title={'San Francisco'}
-          key={"markerKey0"}
+  return !location ?
+    <LoadingView /> :
+    (
+      <View style={styles.container}>
+        <MapView style={styles.mapStyle}
+          initialRegion={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02
+          }}
         >
-          <Callout tooltip>
-            <Tooltip location={location} styles={styles} />
-          </Callout>
-        </Marker> */}
-        {allLocations.map(({ name, lat, long }, index) => {
-          return (
-            <Marker
-              coordinate={{ latitude: lat, longitude: long }}
-              title={name}
-              key={"markerKey" + index}
-            >
-              <Callout tooltip>
-                <Tooltip location={location} styles={styles} />
-              </Callout>
-            </Marker>
-          );
-        })}
-      </MapView>
-      <Text style={styles.title}>{address}</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-    </View>
-  );
+          {allLocations.map(({ name, lat, long }, index) => {
+            return (
+              <Marker
+                coordinate={{ latitude: lat, longitude: long }}
+                title={name}
+                key={"markerKey" + index}
+              >
+                <Callout tooltip>
+                  <Tooltip location={location} />
+                </Callout>
+              </Marker>
+            );
+          })}
+        </MapView>
+        <Text style={styles.title}>{address}</Text>
+        <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+        <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      </View>
+    );
 }
 
 const styles = StyleSheet.create({
