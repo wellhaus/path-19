@@ -21,8 +21,8 @@ const typeDefs: any = gql`
   type Locations {
     _id: Int!
     name: String!
-    latitude: Int!
-    longitude: Int!
+    latitude: Float!
+    longitude: Float!
     onset: String!
     date_visited: String!
     user_id: Int

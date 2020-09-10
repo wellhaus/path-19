@@ -164,7 +164,7 @@ export const resolvers = {
           // add user
           await model.query(insertQuery, [email, hashedPassword, firstname, lastname, status]);
           // find added user
-          const { user } = await model.query(findQuery, [email]);
+          const user = await model.query(findQuery, [email]);
           // add token to user - not sure that we'll need this *
           const token = jwt.sign({ email: user.email }, TOKEN_SECRET);
           return { token, user };

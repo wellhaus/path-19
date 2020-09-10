@@ -11,11 +11,7 @@ interface props {
 const ADD_USER = gql`
   mutation Register($email: String!, $password: String!, $firstname: String!, $lastname: String!, $status: Boolean!) {
     register(email: $email, password: $password, firstname: $firstname, lastname: $lastname, status: $status) {
-      email
-			password
-			firstname
-			lastname
-			status
+      token
     }
   }
 `;
@@ -25,11 +21,15 @@ export default function TabTwoLoginScreen({ setLogin } : props) {
 	const [register, { data }] = useMutation(ADD_USER)
 
 	
-	const onSubmit = (data : object) => {
-		// const { email, password, firstname, lastname, status } = data;
-		// register({ variables: { email, password, firstname, lastname, status } })
-		setLogin(true)
-		console.log(data)
+	const onSubmit = async (data : any) => {
+		try {
+			const { email, password, firstname, lastname } = await data;
+			await register({ variables: { email, password, firstname, lastname, status: true } })
+			setLogin(true)
+			console.log(data)
+		} catch (error) {
+			console.log(error)
+		}	
 	}
   return (
     <>
@@ -39,7 +39,7 @@ export default function TabTwoLoginScreen({ setLogin } : props) {
         control={control}
         render={({ onChange, onBlur, value }) => (
           <>
-          <Text style={styles.text}>User Name</Text>
+          <Text style={styles.text}>Email</Text>
           <TextInput
             style={styles.input}
             onBlur={onBlur}
@@ -48,11 +48,11 @@ export default function TabTwoLoginScreen({ setLogin } : props) {
           />
           </>
         )}
-        name="username"
+        name="email"
         rules={{ required: true }}
         defaultValue=""
       />
-      {errors.username && <Text>This is required.</Text>}
+      {errors.email && <Text>This is required.</Text>}
 
       <Controller
         control={control}
@@ -74,6 +74,44 @@ export default function TabTwoLoginScreen({ setLogin } : props) {
         defaultValue=""
       />
 			{errors.password && <Text>This is required.</Text>}
+			<Controller
+        control={control}
+        style={styles.input}
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <Text style={styles.text}>First Name</Text>
+            <TextInput
+              style={styles.input}
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+            />
+          </>
+        )}
+				name="firstname"
+        rules={{ required: true }}
+        defaultValue=""
+      />
+			{errors.firstname && <Text>This is required.</Text>}
+			<Controller
+        control={control}
+        style={styles.input}
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <Text style={styles.text}>Last Name</Text>
+            <TextInput
+              style={styles.input}
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+            />
+          </>
+        )}
+				name="lastname"
+        rules={{ required: true }}
+        defaultValue=""
+      />
+			{errors.lastname && <Text>This is required.</Text>}
        <TouchableOpacity
          style={styles.button}
          onPress={handleSubmit(onSubmit)}>
@@ -118,5 +156,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 30,
     color: 'black'
+	},
+	checkbox: {
+		alignSelf: "center",
+		width: 50,
+		height: 50
   },
 });
