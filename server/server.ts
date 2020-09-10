@@ -1,10 +1,5 @@
-// const express = require('express');
-// import { ApolloServer } from 'apollo-server';
-const { ApolloServer } = require('apollo-server')
-// const typeDefs = require('./src/typeDefs');
-// const resolvers = require('./src/resolvers.ts');
-// const getUser = require('./src/utils.ts');
-import { typeDefs } from './src/typeDefs';
+import { ApolloServer } from 'apollo-server';
+import typeDefs from './src/typeDefs';
 import { resolvers } from './src/resolvers';
 import { getUser } from './src/utils';
 

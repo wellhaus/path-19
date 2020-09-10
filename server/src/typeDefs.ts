@@ -1,8 +1,8 @@
 /* GraphQL schemas */
-const { gql } = require('apollo-server');
+const { ApolloServer, gql } = require('apollo-server');
 
 // Define shape of data as types
-export const typeDefs = gql`
+const typeDefs: any = gql`
   type User {
     id: Int!
     email: String
@@ -33,4 +33,5 @@ export const typeDefs = gql`
     login(email: String!, password: String!): LoginResponse
   }
 `;
-// module.exports = typeDefs;
+
+export default typeDefs;

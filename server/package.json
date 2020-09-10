@@ -4,8 +4,8 @@
   "description": "Self-report COVID-19 tracer",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production tsc && node ./server.ts",
-    "dev": "NODE_ENV=development tsc && nodemon ./server.ts"
+    "start": "NODE_ENV=production tsc && node ./build/server.js",
+    "dev": "NODE_ENV=development tsc && nodemon ./build/server.js"
   },
   "repository": {
     "type": "git",

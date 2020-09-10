@@ -1,6 +1,6 @@
 // import * as bcrypt from "bcryptjs";
 // const jwt = require('jsonwebtoken');
-const model = require('./model.ts');
+const model = require('./model');
 require('dotenv').config();
 // const TOKEN_SECRET = process.env
 
