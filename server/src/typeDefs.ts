@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server');
 
 // Define tables and types for each field
-// Exclamation point means that it is non-nullable (aka it's required)
+// ! = non-nullable (aka it's required)
 const typeDefs: any = gql`
   # type Query defines all top-level entry points for queries that clients can execute
   type Query {
@@ -30,23 +30,13 @@ const typeDefs: any = gql`
     user: Users
   }
 
-  # query GetLocations {
-  #  locations {
-  # 			id
-  #   		name
-  #    	longitude
-  #    	latitude
-  #    	onset
-  #    	dateVisited
-  #   }
-  # }
-
 # Send LoginResponse rather than user, so client can save token for additional requests
   type LoginResponse {
     token: String!
     user: Users!
   }
-  # Let user know whether location was successfully updated
+
+  # Let client know whether location was successfully updated
   type UpdateLocation {
     success: Boolean!
     message: String
