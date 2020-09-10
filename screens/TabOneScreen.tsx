@@ -117,7 +117,7 @@ export default function TabOneScreen() {
           >
             {allLocations.map(({ _id, name, latitude, longitude }) => (
               <Marker
-                coordinate={{ latitude: longitude, longitude: latitude }}
+                coordinate={{ latitude, longitude }}
                 key={"markerKey" + _id}
                 image={require('../assets/images/redAuraMarker.png')}
               >
