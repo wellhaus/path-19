@@ -9,7 +9,7 @@ const PORT = 5000;
 
 // Connect to ApolloServer
 const server = new ApolloServer({
-  typeDefs,
+  typeDefs, // instantiate type definitions
   resolvers,
   context: ({ req }) => {
     const tokenWithBearer = req.headers.authorization || '';
