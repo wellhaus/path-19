@@ -1,27 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Dimensions, TextInput, Platform } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
-
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Layout from '../constants/Layout';
 import Tooltip, { TooltipProps } from '../components/Tooltip';
 import LoadingView from '../components/LoadingView';
+import ListView from '../components/ListView';
+import { LocationSchema } from '../constants/Types';
+import Geocoder from 'react-native-geocoder';
 
-interface LocationSchema {
-  name: string,
-  lat: number,
-  long: number,
-  timestamp: number,
-}
+// Fallback strategy: Some Geocoding services might not be included in a device
+// Geocoder.fallbackToGoogle(API_KEY);
 
 export default function TabOneScreen() {
   const [location, setLocation] = useState<Location.LocationData | null>(null);
-  const [address, setAddress] = useState<string>('Waiting...');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [allLocations, setAllLocations] = useState<LocationSchema[]>([]);
+  const _map = useRef(null);
+
+  /* GEOCODING OBJECT
+  {
+    position: {lat, lng},
+    formattedAddress: String, // the full address
+    feature: String | null, // ex Yosemite Park, Eiffel Tower
+    streetNumber: String | null,
+    streetName: String | null,
+    postalCode: String | null,
+    locality: String | null, // city name
+    country: String,
+    countryCode: String
+    adminArea: String | null
+    subAdminArea: String | null,
+    subLocality: String | null
+    }
+  */
+  // NOTE: Geocoding is resource intensive -> request wisely
+  const handleSearch = async (place: string) => {
+    if (_map) {
+      try {
+        // const targetCoords = await Location.geocodeAsync(place);
+        // const { latitude, longitude } = targetCoords[0];
+
+        const { position } = await Geocoder.geocodeAddress(place);
+        const { latitude: targetLat, longitude: targetLng } = position;
+
+        _map.current.animateToRegion(
+          {
+            targetLat,
+            targetLng,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05
+          }, 350
+        );
+      } catch (err) {
+        console.log("HANDLESEARCH ERROR: ", err);
+        throw err;
+      }
+    }
+  };
 
   useEffect(() => {
     // Get permission to access and display user's current location
@@ -35,10 +73,15 @@ export default function TabOneScreen() {
 
     // Populate locations array with all data form server
     // TODO: lazy load locations
-    setAllLocations([{ name: 'Dallas', lat: 32.7767, long: -96.7970, timestamp: 1599670918 },
-    { name: 'Salt & Straw Venice', lat: 33.9908, long: -118.4660, timestamp: 1599670918 },
-    { name: 'Miami', lat: 25.7617, long: -80.1918, timestamp: 1599670918 },
-    { name: 'San Francisco', lat: 37.7749, long: -122.4194, timestamp: 1599670918 }
+    // Create local cache
+    // Create key using parameters of each new fetch for locations
+    // Store in state along with queried region
+    // Check if last call was done with the same key and with a region wrapping current one
+    // If so, we alreday have all the points to display so ignore request
+    setAllLocations([{ name: 'Dallas', lat: 32.7767, long: -96.7970, timestamp: 1599670918, proximity: 0 },
+    { name: 'Salt & Straw Venice', lat: 33.9908, long: -118.4660, timestamp: 1599670918, proximity: 0 },
+    { name: 'Miami', lat: 25.7617, long: -80.1918, timestamp: 1599670918, proximity: 0 },
+    { name: 'San Francisco', lat: 37.7749, long: -122.4194, timestamp: 1599670918, proximity: 0 }
     ]);
   }, []);
 
@@ -49,6 +92,7 @@ export default function TabOneScreen() {
       (
         <View style={styles.container}>
           <MapView style={styles.mapStyle}
+            ref={_map}
             initialRegion={{
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
@@ -73,15 +117,13 @@ export default function TabOneScreen() {
               placeholder="Search places"
               placeholderTextColor="#000"
               autoCapitalize="none"
-              onSubmitEditing={() => console.log('hihihihi submitted')}
+              onSubmitEditing={({ nativeEvent }) => handleSearch(nativeEvent.text)}
               // onChangeText={(newInput) => console.log(newInput)}
               style={{ flex: 1, padding: 0 }}
             />
             <Ionicons name="ios-search" size={20} />
           </View>
-          <Text style={styles.title}>{address}</Text>
-          <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-          <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+          <ListView placesToList={allLocations} currentLocation={location} />
         </View>
       );
 }
@@ -98,7 +140,7 @@ const styles = StyleSheet.create({
   },
   searchBox: {
     position: 'absolute',
-    marginTop: Platform.OS === 'ios' ? 40 : 20,
+    marginTop: Platform.OS === 'ios' ? 20 : 10,
     top: 0,
     flexDirection: 'row',
     backgroundColor: '#fff',
@@ -111,11 +153,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
   mapStyle: {
     width: Dimensions.get('window').width,
