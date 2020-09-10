@@ -7,18 +7,23 @@ const PORT = 5000;
 
 // const app = express();
 
+// set up global context for each resolver
+const context = ({ req }) => {
+  const tokenWithBearer = req.headers.authorization || '';
+  const token = tokenWithBearer.split(' ')[1];
+  const user = getUser(token);
+  return user;
+}
+
 // Connect to ApolloServer
 const server = new ApolloServer({
   typeDefs, // instantiate type definitions
   resolvers,
-  context: ({ req }) => {
-    const tokenWithBearer = req.headers.authorization || '';
-    const token = tokenWithBearer.split(' ')[1];
-    const user = getUser(token);
-    return user;
-  },
+  // dataSources,
+  context,
   tracing: true,
 });
+
 // Apply express as middleware
 // server.applyMiddleware({ app, path: '/graphql' });
 
@@ -39,5 +44,5 @@ const server = new ApolloServer({
 // });
 
 server.listen({ port: PORT }, () => {
-  console.log(`🚀 Server ready at http://localhost:${PORT}`);
+  console.log(`🚀 Server ready at http://localhost:${PORT}/`);
 });

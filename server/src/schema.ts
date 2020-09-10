@@ -1,30 +1,33 @@
-const { ApolloServer, gql } = require('apollo-server');
+const { gql } = require('apollo-server');
 
 // Define tables and types for each field
 // Exclamation point means that it is non-nullable (aka it's required)
 const typeDefs: any = gql`
   # type Query defines all top-level entry points for queries that clients can execute
   type Query {
-    currentUser: User!
-    locations: [Location]
+    currentUser: Users!
+    locations: [Locations]
   }
 
-  type User {
+  type Users {
     id: Int!
     email: String!
-    locations: [Location]
+    firstName: String!
+    lastName: String!
+    status: Boolean!
+    locations: [Locations]
     # jwt: String
   }
 
-  type Location {
+  type Locations {
     _id: Int!
     name: String!
-    longitude: Int!
     latitude: Int!
+    longitude: Int!
     onset: String!
     dateVisited: String!
-    timestamp: Int!
-    user: User
+    user_id: Int
+    user: Users
   }
 
   # query GetLocations {
@@ -41,14 +44,24 @@ const typeDefs: any = gql`
 # Send LoginResponse rather than user, so client can save token for additional requests
   type LoginResponse {
     token: String!
-    user: User!
+    user: Users!
   }
 
   # Mutation type defines entry points for write operations
   type Mutation {
-    addLocation(longitude: Int, latitude: Int, timestamp: Int): Location
+    # if false, add location failed -- check errors
+    addLocation(name: String!, latitude: Int, longitude: Int, onset: String!, dateVisited: String!): RecordUpdateLocation
+    # if false, delete location failed -- check errors
+    deleteLocation(locationId: Int!): RecordUpdateLocation
     register(email: String!, password: String!): LoginResponse
     login(email: String!, password: String!): LoginResponse
+  }
+
+  # Let user know whether location was successfully updated
+  type RecordUpdateLocation {
+    success: Boolean!
+    message: String
+    locations: [Locations] # return array of locations, if successful
   }
 `;
 

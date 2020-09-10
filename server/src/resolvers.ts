@@ -8,18 +8,63 @@ require('dotenv').config();
 // schema.
 export const resolvers = {
   Query: {
-       locations: async () => {
-         const queryText =  'SELECT * FROM Locations'
-        try {
-          const locations = await model.query(queryText);
-          console.log(locations.rows)
-          return locations.rows;
-        } catch(err) {
-          console.log('Error in getLocations query: ', err)
-          return err;
+    locations: async () => {
+      const queryText = 'SELECT * FROM Locations'
+      try {
+        // Send query to Postgres
+        const locations = await model.query(queryText);
+        console.log('Returned Data: ', locations.rows)
+
+        // invoke locationReducer to return custom date for onset and dateVisited keys
+        // otherwise, these keys are returned as a string of unreadable numbers i.e. '1584946800000'
+        const locationReducer = (location) => {
+          const onsetDate = new Date(location.onset)
+          const onsetYear = onsetDate.getFullYear();
+          const onsetMonth = monthName(onsetDate.getMonth())
+          const onsetDay = onsetDate.getDate();
+          const onsetDatestring = `${onsetMonth} ${onsetDay}, ${onsetYear}`;
+
+          const date = new Date(location.dateVisited)
+          const year = date.getFullYear();
+          const month = monthName(date.getMonth())
+          const day = date.getDate();
+          const datestring = `${month} ${day}, ${year}`;
+
+          function monthName(index) {
+            const monthLegend = {
+              0: "January",
+              1: "February",
+              2: "March",
+              3: "April",
+              4: "May",
+              5: "June",
+              6: "July",
+              7: "August",
+              8: "September",
+              9: "October",
+              10: "November",
+              11: "December"
+            }
+            return monthLegend[index];
+          };
+          return {
+            _id: location._id,
+            name: location.name,
+            latitude: location.latitude,
+            longitude: location.longitude,
+            onset: onsetDatestring,
+            dateVisited: datestring,
+            user_id: location.user_id,
+          };
         }
-  
-       } 
+
+        return locations.rows.map((locationObj: any) => locationReducer(locationObj));
+      } catch (err) {
+        console.log('Error in getLocations query: ', err)
+        return err;
+      }
+
+    }
   },
   Mutation: {
     /* Add a Location 
@@ -33,18 +78,19 @@ export const resolvers = {
     */
 
     // data is an object that contains all GraphQL arguments provided for this field
-       addLocation: async (root, data) => {
-      const {name, longitude, latitude, onset, dateVisited} = data;
-         const queryText = `INSERT INTO 
+    addLocation: async (root, data) => {
+      const { name, longitude, latitude, onset, dateVisited } = data;
+      const queryText = `INSERT INTO 
                             Locations (name,longitude,latitude,onset,dateVisited) 
                             VALUES ($1,$2,$3,$4,$5)`;
-         try {
-         await model.query(queryText, [name, longitude, latitude, onset, dateVisited]);
-       }  catch (err) {
-         console.log('Error in addLocation resolver:', err);
-         return err;
-       }
-        }
+      try {
+        await model.query(queryText, [name, longitude, latitude, onset, dateVisited]);
+      } catch (err) {
+        console.log('Error in addLocation resolver:', err);
+        return err;
+      }
+    }
+
     /* Register */
     //  register: async (root, {email, password}) => {
     // const insertQuery = 'INSERT INTO Users (email, password) VALUES ($1,$2)';
