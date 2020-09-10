@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server';
-import typeDefs from './src/typeDefs';
+import typeDefs from './src/schema'; // GraphQL type definitions from schema file
 import { resolvers } from './src/resolvers';
 import { getUser } from './src/utils';
 
