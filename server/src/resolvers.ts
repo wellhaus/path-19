@@ -1,14 +1,12 @@
 // import * as bcrypt from "bcryptjs";
-
-import { query } from "express";
-
+// import { query } from "express";
 // const jwt = require('jsonwebtoken');
-const model = require('./model');
-require('dotenv').config();
 // const TOKEN_SECRET = process.env
 
-// Resolvers define the technique for fetching the types defined in the
-// schema.
+const model = require('./model');
+require('dotenv').config();
+
+// Resolvers define the technique for fetching the types defined in the schema.
 export const resolvers = {
   Query: {
     locations: async () => {
@@ -97,7 +95,7 @@ export const resolvers = {
     },
 
     // client-side mutation will look something like:
-    // mutation addLocation {
+    // mutation deleteLocation {
     //   updateUserEmail(name: 'Benny', longitude: '234234.24, 
     //   latitude: 23523.9023, onset: '2020-06-06', 
     //   dateVisited: '2020-06-01'){
@@ -116,6 +114,12 @@ export const resolvers = {
       }
     },
 
+    // client-side mutation will look something like:
+    // mutation editLocation {
+    //   updateUserEmail(name: 'Benny', longitude: '234234.24, 
+    //   latitude: 23523.9023, onset: '2020-06-06', 
+    //   dateVisited: '2020-06-01'){
+    // } 
     editLocation: async (root, data) => {
       const { _id, name, latitude, longitude, onset, dateVisited } = data;
       const queryText = `UPDATE public.locations
