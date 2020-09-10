@@ -3,7 +3,7 @@ import typeDefs from './src/typeDefs';
 import { resolvers } from './src/resolvers';
 import { getUser } from './src/utils';
 
-const PORT = 4000;
+const PORT = 5000;
 
 // const app = express();
 
@@ -17,6 +17,7 @@ const server = new ApolloServer({
     const user = getUser(token);
     return user;
   },
+  tracing: true,
 });
 // Apply express as middleware
 // server.applyMiddleware({ app, path: '/graphql' });

@@ -8,11 +8,24 @@ require('dotenv').config();
 // schema.
 export const resolvers = {
   Query: {
-    //   locations:  *some function to execute SQL query *
+       locations: async () => {
+         const queryText =  'SELECT * FROM Locations'
+        try {
+          const locations = await model.query(queryText);
+          console.log(locations.rows)
+          return locations.rows;
+        } catch(err) {
+          console.log('Error in getLocations query: ', err)
+          return err;
+        }
+  
+       } 
   },
   Mutation: {
     /* Add a Location */
-    //   addLocation: * some function to execute SQL query *
+      //  addLocation: async () => {
+      //    const queryText = 'INSERT'
+      //  }
     /* Register */
     //  register: async (root, {email, password}) => {
     // const insertQuery = 'INSERT INTO Users (email, password) VALUES ($1,$2)';

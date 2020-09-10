@@ -11,11 +11,26 @@ const typeDefs: any = gql`
   }
 
   type Location {
-    id: Int!
+    _id: Int!
+    name: String
     longitude: Int!
     latitude: Int!
+    onset: String
+    dateVisited: String
     timestamp: Int
+    user: User
   }
+  # FE query
+# query GetLocations {
+ # locations {
+#			id
+ #  		name
+ #   	longitude
+ #   	latitude
+ #   	onset
+ #   	dateVisited
+ # }
+# }
 # Send LoginResponse rather than user, so client can save token for additional requests
   type LoginResponse {
     token: String
