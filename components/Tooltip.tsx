@@ -12,7 +12,7 @@ export default function Tooltip({ location, placeName }: TooltipProps) {
   const [errorMsg, setErrorMsg] = useState(null);
   const [address, setAddress] = useState<Location.Address | null>(null);
 
-  const getReadableLocation = async ({ coords }: Location.LocationData): Location.Address => {
+  const getReadableLocation = async ({ coords }: Location.LocationData): Promise<Location.Address> => {
     const { latitude, longitude } = coords;
     try {
       const readableLocation = await Location.reverseGeocodeAsync({ latitude, longitude });
@@ -34,6 +34,9 @@ export default function Tooltip({ location, placeName }: TooltipProps) {
     })();
   }, []);
 
+  // Simplify visit timestamp to just day, month, date, year
+  const visitedTimestamp = new Date(location.timestamp).toString().split(' ').slice(0, 4).join(' ');
+
   return !address ?
     (
       <View style={styles.bubble}>
@@ -52,7 +55,7 @@ export default function Tooltip({ location, placeName }: TooltipProps) {
         <View >
           <View style={styles.bubble}>
             <Text>{"Confirmed Patient"}</Text>
-            <Text>{"Last visited: " + new Date(location.timestamp)}</Text>
+            <Text>{`Last visited: ${visitedTimestamp}`}</Text>
             <Text>{placeName}</Text>
           </View>
           <View style={styles.arrowBorder} />
