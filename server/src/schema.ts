@@ -50,15 +50,15 @@ const typeDefs: any = gql`
   # Mutation type defines entry points for write operations
   type Mutation {
     # if false, add location failed -- check errors
-    addLocation(name: String!, latitude: Int, longitude: Int, onset: String!, dateVisited: String!): RecordUpdateLocation
+    addLocation(name: String!, latitude: Int, longitude: Int, onset: String!, dateVisited: String!): UpdateLocation
     # if false, delete location failed -- check errors
-    deleteLocation(locationId: Int!): RecordUpdateLocation
+    deleteLocation(locationId: Int!): UpdateLocation
     register(email: String!, password: String!): LoginResponse
     login(email: String!, password: String!): LoginResponse
   }
 
   # Let user know whether location was successfully updated
-  type RecordUpdateLocation {
+  type UpdateLocation {
     success: Boolean!
     message: String
     locations: [Locations] # return array of locations, if successful

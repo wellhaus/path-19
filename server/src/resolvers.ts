@@ -1,4 +1,7 @@
 // import * as bcrypt from "bcryptjs";
+
+import { query } from "express";
+
 // const jwt = require('jsonwebtoken');
 const model = require('./model');
 require('dotenv').config();
@@ -57,13 +60,13 @@ export const resolvers = {
             user_id: location.user_id,
           };
         }
-
+        // map over locations array of objects, and invoke locationReducer on each object
+        // to return custom date format
         return locations.rows.map((locationObj: any) => locationReducer(locationObj));
       } catch (err) {
         console.log('Error in getLocations query: ', err)
         return err;
       }
-
     }
   },
   Mutation: {
@@ -81,14 +84,28 @@ export const resolvers = {
     addLocation: async (root, data) => {
       const { name, longitude, latitude, onset, dateVisited } = data;
       const queryText = `INSERT INTO 
-                            Locations (name,longitude,latitude,onset,dateVisited) 
-                            VALUES ($1,$2,$3,$4,$5)`;
+                            Locations (name, latitude, longitude, onset, dateVisited) 
+                            VALUES ($1, $2, $3, $4, $5)`;
       try {
-        await model.query(queryText, [name, longitude, latitude, onset, dateVisited]);
+        await model.query(queryText, [name, latitude, longitude, onset, dateVisited]);
       } catch (err) {
-        console.log('Error in addLocation resolver:', err);
+        console.log('Error in addLocation resolver: ', err);
         return err;
       }
+    },
+
+    deleteLocation: async (root, data) => {
+      const { _id } = data;
+      const queryText = `DELETE `
+
+      try {
+        await model.query(queryText, _id);
+      } catch (err) {
+        console.log('Error in deleteLocation resolver: ', err);
+
+      }
+
+
     }
 
     /* Register */
