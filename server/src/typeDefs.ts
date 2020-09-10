@@ -16,7 +16,6 @@ const typeDefs: any = gql`
     lastname: String!
     status: Boolean!
     locations: [Locations]
-    # jwt: String
   }
 
   type Locations {

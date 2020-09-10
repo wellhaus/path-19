@@ -28,7 +28,7 @@ const locationReducer = (location) => {
   const onsetMonth = monthName(onsetDate.getMonth())
   const onsetDay = onsetDate.getDate();
   const onsetDatestring = `${onsetMonth} ${onsetDay}, ${onsetYear}`;
-  const date = new Date(location.dateVisited)
+  const date = new Date(location.date_visited)
   const year = date.getFullYear();
   const month = monthName(date.getMonth())
   const day = date.getDate();
@@ -166,7 +166,7 @@ export const resolvers = {
           // find added user
           const { user } = await model.query(findQuery, [email]);
           // add token to user - not sure that we'll need this *
-          const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
+          const token = jwt.sign({ email: user.email }, TOKEN_SECRET);
           return { token, user };
       } catch (err){
           console.log ('Error in register:', err)
@@ -194,7 +194,7 @@ export const resolvers = {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) throw new Error('Invalid password')
       // on success
-      const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
+      const token = jwt.sign({ email: user.email}, TOKEN_SECRET);
       return { token, user };
       // handle any other error
     } catch (err) {
