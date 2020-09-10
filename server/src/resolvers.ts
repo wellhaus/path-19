@@ -50,6 +50,17 @@ const locationReducer = (location) => {
 // Resolvers define the technique for fetching the types defined in the schema.
 export const resolvers = {
   Query: {
+/* client-side query */
+//  query GetLocations {
+//      locations {
+//    			_id
+//    			name
+//    			longitude
+//    			latitude
+//    			onset
+//    			dateVisited
+//      }
+//    }
     locations: async () => {
       const queryText = 'SELECT * FROM Locations'
       try {
