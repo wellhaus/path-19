@@ -1,32 +1,12 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import React, { useState } from 'react';
 import { Text, View } from '../components/Themed';
+import TabTwoLoginScreen from './TabTwoLoginScreen';
 
 export default function TabTwoScreen() {
+  const [loggedIn, setLogin] = useState(false);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
-    </View>
+    <>
+    { loggedIn ? <Text>yey</Text> : <TabTwoLoginScreen setLogin={setLogin}/>}
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
