@@ -34,9 +34,9 @@ export default function TabOneScreen() {
 
     // Populate locations array with all data form server
     // TODO: lazy load locations
-    setAllLocations([{ name: 'Dallas', lat: 32.7767, long: 96.7970, timestamp: 1599670918 },
-    { name: 'Salt & Straw Venice', lat: 33.9908, long: 118.4660, timestamp: 1599670918 },
-    { name: 'Miami', lat: 25.7617, long: 80.1918, timestamp: 1599670918 },
+    setAllLocations([{ name: 'Dallas', lat: 32.7767, long: -96.7970, timestamp: 1599670918 },
+    { name: 'Salt & Straw Venice', lat: 33.9908, long: -118.4660, timestamp: 1599670918 },
+    { name: 'Miami', lat: 25.7617, long: -80.1918, timestamp: 1599670918 },
     { name: 'San Francisco', lat: 37.7749, long: -122.4194, timestamp: 1599670918 }
     ]);
   }, []);
