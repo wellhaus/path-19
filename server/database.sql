@@ -47,28 +47,28 @@ VALUES
 
 INSERT INTO public.locations
 VALUES
-  (1, 'Starbucks', -122.0842499, 37.4224764, '2020-03-23', '2020-03-20', 1);
+  (1, 'Starbucks', 37.4224764, -122.0842499, '2020-03-23', '2020-03-20', 1);
 INSERT INTO public.locations
 VALUES
-  (2, 'Alfred Coffee', -192.0842499, 39.4224764, '2020-04-23', '2020-04-13', 2);
+  (2, 'Alfred Coffee', 34.0839, 118.3754, '2020-04-23', '2020-04-13', 2);
 INSERT INTO public.locations
 VALUES
-  (3, 'Rubios', -102.0842499, 17.4224764, '2020-07-23', '2020-07-08', 3);
+  (3, 'Rubios', 39.743943, -105.020089, '2020-07-23', '2020-07-08', 3);
 INSERT INTO public.locations
 VALUES
-  (4, 'Sidecar Doughnuts & Coffee', -162.0842499, 87.4224764, '2020-08-23', '2020-08-13', 4);
+  (4, 'Sidecar Doughnuts & Coffee', 34.0214608, -118.4982049, '2020-08-23', '2020-08-13', 4);
 INSERT INTO public.locations
 VALUES
-  (5, 'Salt & Straw', -145.0842499, 31.4224764, '2020-03-23', '2020-03-20', 1);
+  (5, 'Salt & Straw', 45.4891595, -122.7344734, '2020-03-23', '2020-03-20', 1);
 INSERT INTO public.locations
 VALUES
-  (6, 'Blue Bottle Coffee', -180.0842499, 30.4224764, '2020-04-23', '2020-04-13', 2);
+  (6, 'Blue Bottle Coffee', 37.3202302, -121.950044, '2020-04-23', '2020-04-13', 2);
 INSERT INTO public.locations
 VALUES
-  (7, 'Gratitude Cafe', -105.0842499, 12.4224764, '2020-07-23', '2020-07-08', 3);
+  (7, 'Gratitude Cafe', 33.9979655, -118.476053, '2020-07-23', '2020-07-08', 3);
 INSERT INTO public.locations
 VALUES
-  (8, 'Afters Ice Cream', -153.0842499, 89.4224764, '2020-08-23', '2020-08-13', 4);
+  (8, 'Afters Ice Cream', 34.1547327, -118.4504157, '2020-08-23', '2020-08-13', 4);
 
 select setval('public.users__id_seq', 5, false);
 select setval('public.locations__id_seq', 9, false);
