@@ -19,16 +19,16 @@ export default function ListView({ placesToList, currentLocation }: ListViewProp
 
   const currPlace: GeolibInputCoordinates = { latitude: currentLocation.coords.latitude, longitude: currentLocation.coords.longitude };
 
-  let listData = placesToList.map((place, i) => {
-    const pinnedPlace: GeolibInputCoordinates = { latitude: place.lat, longitude: place.long };
+  let listData = placesToList.map((place) => {
+    const pinnedPlace: GeolibInputCoordinates = { latitude: place.latitude, longitude: place.longitude };
     return {
-      key: `placeKey${i}`,
+      key: `placeKey${place._id}`,
       ...place,
       proximity: getDistance(pinnedPlace, currPlace),
     }
   });
 
-  listData = orderByDistance(currPlace, listData);
+  // listData = orderByDistance(currPlace, listData);
 
   return (
     <View style={styles.container}>
