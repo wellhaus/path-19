@@ -43,7 +43,7 @@ export default function BottomTabNavigator() {
           component={TabTwoNavigator}
           options={{
             tabBarIcon: () => <Icon
-            name='login'
+            name='portrait'
             type='material'
             color='#517fa4'
           />,
