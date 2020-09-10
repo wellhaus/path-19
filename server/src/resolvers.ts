@@ -6,8 +6,6 @@ const { TOKEN_SECRET } = process.env
 
 const model = require('./model');
 
-
-
 const monthLegend = {
   0: "January",
   1: "February",
@@ -76,7 +74,7 @@ export const resolvers = {
     }
   },
   Mutation: {
-    /* Add a Location 
+    /* addLocation
           client-side mutation is:
               mutation AddLocation {
                  addLocation(name: "Urrth Cafe", longitude: 234234, 
@@ -88,8 +86,6 @@ export const resolvers = {
               }
       }
     */
-
-    // data is an object that contains all GraphQL arguments provided for this field
        addLocation: async (root, data) => {
       const {name, latitude, longitude, onset, date_visited, user_id} = data;
       console.log('Data in addLocation', data)
@@ -159,24 +155,24 @@ export const resolvers = {
     //   }
     // }
 
-     register: async (root, data) => {
-    const {email, password, firstname, lastname, status} = data;
-    const insertQuery = `INSERT INTO Users (email,password,firstname,lastname,status) 
-                              VALUES ($1,$2,$3,$4,$5)`;
-    const findQuery = 'SELECT * FROM Users WHERE email=$1';
-    const hashedPassword = await bcrypt.hash(password, 10);
-     try {
-        // add user
-        await model.query(insertQuery, [email, hashedPassword, firstname, lastname, status]);
-        // find added user
-        const user = await model.query(findQuery, [email]);
-        // add token to user - not sure that we'll need this *
-        const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
-        return { token, user };
-     } catch (err){
-        console.log ('Error in register:', err)
-     }
-
+    register: async (root, data) => {
+      const {email, password, firstname, lastname, status} = data;
+      const insertQuery = `INSERT INTO Users (email,password,firstname,lastname,status) 
+                                VALUES ($1,$2,$3,$4,$5)`;
+      const findQuery = 'SELECT * FROM Users WHERE email=$1';
+      const hashedPassword = await bcrypt.hash(password, 10);
+      try {
+          // add user
+          await model.query(insertQuery, [email, hashedPassword, firstname, lastname, status]);
+          // find added user
+          const { user } = await model.query(findQuery, [email]);
+          // add token to user - not sure that we'll need this *
+          const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
+          return { token, user };
+      } catch (err){
+          console.log ('Error in register:', err)
+      }
+    },
 
     /* Login */
     // CLIENT-SIDE QUERY:
@@ -189,11 +185,11 @@ export const resolvers = {
     // }
 
      login: async (root, {email, password}) => {
-       // TODO: complete find query
-      const findQuery = 'SELECT * from Users WHERE'
+      const findQuery = 'SELECT * FROM Users WHERE email=$1';
     try {
    // * find user in db *
-      const user = await model.query(findQuery, [email]);
+      const res = await model.query(findQuery, [email]);
+      const [user] = res.rows;
       if (!user) throw new Error('Cannot find user in database');
       // * check for matching password *
       const isMatch = await bcrypt.compare(password, user.password);
@@ -204,11 +200,12 @@ export const resolvers = {
       // handle any other error
     } catch (err) {
       console.log('Error in login:', err)
+      return err;
     }
     }
   },
 }
-}
+
 
 
 // if (!user) throw new Error('Cannot find user in database')
