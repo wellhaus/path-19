@@ -1,32 +1,27 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import React, { useState } from 'react';
 import { Text, View } from '../components/Themed';
+import TabTwoLoginScreen from './TabTwoLoginScreen';
+import TabTwoReportScreen from './TabTwoReportScreen'
+import TabTwoSignupScreen from './TabTwoSignupScreen'
+
 
 export default function TabTwoScreen() {
+  const [loggedIn, setLogin] = useState(false);
+  const [register, setRegister] = useState(false)
+
+  const renderScreen = () => {
+    if(!loggedIn && register) {
+      return <TabTwoSignupScreen setLogin={setLogin} />
+    } else if(!loggedIn && !register) {
+      return <TabTwoLoginScreen setLogin={setLogin} setRegister={setRegister} />
+    } else if(loggedIn) {
+      return <TabTwoReportScreen setLogin={setLogin} />
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
-    </View>
+    <>
+    {renderScreen()}
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
