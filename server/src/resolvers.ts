@@ -1,10 +1,51 @@
-// import * as bcrypt from "bcryptjs";
+import * as bcrypt from "bcryptjs";
 // import { query } from "express";
-// const jwt = require('jsonwebtoken');
-// const TOKEN_SECRET = process.env
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const { TOKEN_SECRET } = process.env
 
 const model = require('./model');
-require('dotenv').config();
+
+
+
+const monthLegend = {
+  0: "January",
+  1: "February",
+  2: "March",
+  3: "April",
+  4: "May",
+  5: "June",
+  6: "July",
+  7: "August",
+  8: "September",
+  9: "October",
+  10: "November",
+  11: "December"
+}
+const monthName = (index) => monthLegend[index];
+
+// Return custom date for onset and dateVisited keys
+const locationReducer = (location) => {
+  const onsetDate = new Date(location.onset)
+  const onsetYear = onsetDate.getFullYear();
+  const onsetMonth = monthName(onsetDate.getMonth())
+  const onsetDay = onsetDate.getDate();
+  const onsetDatestring = `${onsetMonth} ${onsetDay}, ${onsetYear}`;
+  const date = new Date(location.dateVisited)
+  const year = date.getFullYear();
+  const month = monthName(date.getMonth())
+  const day = date.getDate();
+  const datestring = `${month} ${day}, ${year}`
+  return {
+    _id: location._id,
+    name: location.name,
+    latitude: location.latitude,
+    longitude: location.longitude,
+    onset: onsetDatestring,
+    date_visited: datestring,
+    user_id: location.user_id,
+  };
+}
 
 // Resolvers define the technique for fetching the types defined in the schema.
 export const resolvers = {
@@ -15,51 +56,7 @@ export const resolvers = {
         // Send query to Postgres
         const locations = await model.query(queryText);
         console.log('Returned Data: ', locations.rows)
-
-        // invoke locationReducer to return custom date for onset and dateVisited keys
-        // otherwise, these keys are returned as a string of unreadable numbers i.e. '1584946800000'
-        const locationReducer = (location) => {
-          const onsetDate = new Date(location.onset)
-          const onsetYear = onsetDate.getFullYear();
-          const onsetMonth = monthName(onsetDate.getMonth())
-          const onsetDay = onsetDate.getDate();
-          const onsetDatestring = `${onsetMonth} ${onsetDay}, ${onsetYear}`;
-
-          const date = new Date(location.dateVisited)
-          const year = date.getFullYear();
-          const month = monthName(date.getMonth())
-          const day = date.getDate();
-          const datestring = `${month} ${day}, ${year}`;
-
-          function monthName(index) {
-            const monthLegend = {
-              0: "January",
-              1: "February",
-              2: "March",
-              3: "April",
-              4: "May",
-              5: "June",
-              6: "July",
-              7: "August",
-              8: "September",
-              9: "October",
-              10: "November",
-              11: "December"
-            }
-            return monthLegend[index];
-          };
-          return {
-            _id: location._id,
-            name: location.name,
-            latitude: location.latitude,
-            longitude: location.longitude,
-            onset: onsetDatestring,
-            dateVisited: datestring,
-            user_id: location.user_id,
-          };
-        }
-        // map over locations array of objects, and invoke locationReducer on each object
-        // to return custom date format
+        // Map over locations array to return custom date format
         return locations.rows.map((locationObj: any) => locationReducer(locationObj));
       } catch (err) {
         console.log('Error in getLocations query: ', err)
@@ -68,58 +65,58 @@ export const resolvers = {
     }
   },
   Mutation: {
-    // client-side mutation will look something like:
-    // mutation addLocation {
-    //   addLocation(name: 'Benny',
-    //   latitude: 23523.9023,
-    //   longitude: '234234.24, 
-    //   onset: '2020-06-06', 
-    //   dateVisited: '2020-06-01')
-    // }
+    /* Add a Location 
+          client-side mutation is:
+              mutation AddLocation {
+                 addLocation(name: "Urrth Cafe", longitude: 234234, 
+                 latitude: 23523, onset: "2020-06-06", 
+                 dateVisited: "2020-06-01", user_id: 10) {
+           success
+           message
+           }
+              }
+      }
+    */
 
     // data is an object that contains all GraphQL arguments provided for this field
-    addLocation: async (root, data) => {
-      const { name, latitude, longitude, onset, dateVisited } = data;
-      const queryText = `INSERT INTO 
-                        Locations (name, latitude, longitude, onset, dateVisited) 
-                        VALUES ($1, $2, $3, $4, $5)`;
-      const queryParams = [name, latitude, longitude, onset, dateVisited];
-      try {
-        await model.query(queryText, queryParams);
-        // if successful, query will edit single item in database
-        console.log(`${name} successfully added to database.`);
-      } catch (err) {
-        console.log('Error in addLocation resolver: ', err);
-        return err;
-      }
-    },
+       addLocation: async (root, data) => {
+      const {name, latitude, longitude, onset, date_visited, user_id} = data;
+      console.log('Data in addLocation', data)
+         const queryText = `INSERT INTO 
+                            Locations (name,latitude,longitude,onset,dateVisited,user_id) 
+                            VALUES ($1,$2,$3,$4,$5,$6)`;
+         try {
+         await model.query(queryText, [name, latitude, longitude, onset, date_visited, user_id]);
+         return { success: true, message: `${name} successfully added to locations.`, } 
+       }  catch (err) {
+         console.log('Error in addLocation resolver:', err);
+         return err;
+       }
+        },
 
-    // client-side mutation will look something like:
-    // mutation deleteLocation {
-    //   updateUserEmail(name: 'Benny', longitude: '234234.24, 
-    //   latitude: 23523.9023, onset: '2020-06-06', 
-    //   dateVisited: '2020-06-01'){
-    // } 
+    // client-side mutation is:
+//     mutation deleteLocation{
+//       deleteLocation(locationId: 4) {
+// success
+// message
+// }
+//    }
     deleteLocation: async (root, data) => {
-      const { _id, name } = data;
+      const { locationId } = data;
       const queryText = `DELETE FROM public.locations
-                        WHERE locations._id = ${_id};`
+                        WHERE locations._id = ${locationId};`
       try {
-        await model.query(queryText, _id);
-        // if successful, query will edit single item in database
-        console.log(`Location Number ${_id} - ${name} successfully deleted in database.`);
+        await model.query(queryText);
+        const message = `Location Number ${locationId}  successfully deleted in database.`
+        console.log(message);
+        return { success: true, message }
       } catch (err) {
         console.log('Error in deleteLocation resolver: ', err);
         return err;
       }
     },
 
-    // client-side mutation will look something like:
-    // mutation editLocation {
-    //   updateUserEmail(name: 'Benny', longitude: '234234.24, 
-    //   latitude: 23523.9023, onset: '2020-06-06', 
-    //   dateVisited: '2020-06-01'){
-    // } 
+
     editLocation: async (root, data) => {
       const { _id, name, latitude, longitude, onset, dateVisited } = data;
       const queryText = `UPDATE public.locations
@@ -141,17 +138,23 @@ export const resolvers = {
 
 
     /* Register */
-    //  register: async (root, {email, password}) => {
-    // const insertQuery = 'INSERT INTO Users (email, password) VALUES ($1,$2)';
-    // const findQuery = 'SELECT * FROM Users WHERE username=$1';
-    //  const hashedPassword = await bcrypt.hash(password, 10);
-    //  * insert user into SQL db using  *
-    //  await model.query(insertQuery, [email, hashedPassWord);
-    //  *find user in db so we can sign the JWT with their id*
-    //  const user = await model.query(findQuery, [username]);
-    // * add token to user - not sure that we'll need this *
-    // const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
-    // return { token, user };
+     register: async (root, data) => {
+    const {email, password, firstname, lastname, status} = data;
+    const insertQuery = `INSERT INTO Users (email,password,firstname,lastname,status) 
+                              VALUES ($1,$2,$3,$4,$5)`;
+    const findQuery = 'SELECT * FROM Users WHERE email=$1';
+    const hashedPassword = await bcrypt.hash(password, 10);
+     try {
+        // add user
+        await model.query(insertQuery, [email, hashedPassword, firstname, lastname, status]);
+        // find added user
+        const user = await model.query(findQuery, [email]);
+        // add token to user - not sure that we'll need this *
+        const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
+        return { token, user };
+     } catch (err){
+        console.log ('Error in register:', err)
+     }
     /* Login */
     //  login: async (root, {email, password}) => {
     // * find user in db *
@@ -164,4 +167,5 @@ export const resolvers = {
     // return { token, user };
     // }
   },
-};
+}
+}

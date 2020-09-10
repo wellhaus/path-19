@@ -1,10 +1,10 @@
 -- DROP TABLE IF EXISTS public.users;
-CREATE TABLE public.users (
+DROP TABLE public.users (
 	"_id" serial NOT NULL,
 	"email" varchar UNIQUE NOT NULL,
   "password" varchar NOT NULL,
-	"firstName" varchar (50) NOT NULL,
-	"lastName" varchar (50) NOT NULL,
+	"firstname" varchar (50) NOT NULL,
+	"lastname" varchar (50) NOT NULL,
   "status" boolean NOT NULL,
 	CONSTRAINT "users_pk" PRIMARY KEY ("_id")
 ) WITH (
@@ -12,13 +12,13 @@ CREATE TABLE public.users (
 );
 
 -- DROP TABLE IF EXISTS public.locations;
-CREATE TABLE public.locations (
+DROP TABLE public.locations (
   "_id" serial NOT NULL,
   "name" varchar NOT NULL,
   "latitude" integer NOT NULL,
   "longitude" integer NOT NULL,
   "onset" date NOT NULL,
-  "dateVisited" date NOT NULL,
+  "date_visited" date NOT NULL,
   "user_id" bigint NOT NULL,
   CONSTRAINT "locations_pk" PRIMARY KEY ("_id")
   -- FOREIGN KEY "user_id" REFERENCES public.users("_id")
