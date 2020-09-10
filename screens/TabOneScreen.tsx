@@ -22,16 +22,6 @@ export default function TabOneScreen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [allLocations, setAllLocations] = useState<LocationSchema[]>([]);
 
-  const getReadableLocation = async ({ coords }: Location.LocationData) => {
-    const { latitude, longitude } = coords;
-    try {
-      const readableLocation = await Location.reverseGeocodeAsync({ latitude, longitude });
-      return readableLocation[0];
-    } catch (err) {
-      throw err;
-    }
-  }
-
   useEffect(() => {
     // Get permission to access and display user's current location
     (async () => {
@@ -49,55 +39,39 @@ export default function TabOneScreen() {
     { name: 'Miami', lat: 25.7617, long: 80.1918, timestamp: 1599670918 },
     { name: 'San Francisco', lat: 37.7749, long: -122.4194, timestamp: 1599670918 }
     ]);
-
-    // Get readable postal address from current geocoded location
-    (async () => {
-      if (errorMsg) {
-        setAddress(JSON.stringify(errorMsg));
-      } else if (location) {
-        try {
-          const { city, region, postalCode, country, name } = await getReadableLocation(location);
-          setAddress(`${name} ${city} ${region} ${postalCode} ${country}`);
-        } catch (err) {
-          // console.log("ERROR: ", err);
-          setAddress("Unable to retrieve readable location data given current coordinates");
-        }
-      }
-    })();
-
   }, []);
 
   return !location ?
     <LoadingView /> :
-    (
-      <View style={styles.container}>
-        <MapView style={styles.mapStyle}
-          initialRegion={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02
-          }}
-        >
-          {allLocations.map(({ name, lat, long }, index) => {
-            return (
+    errorMsg ?
+      <LoadingView message={errorMsg} /> :
+      (
+        <View style={styles.container}>
+          <MapView style={styles.mapStyle}
+            initialRegion={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05
+            }}
+          >
+            {allLocations.map(({ name, lat, long }, index) => (
               <Marker
                 coordinate={{ latitude: lat, longitude: long }}
-                title={name}
                 key={"markerKey" + index}
+                image={require('../assets/images/redAuraMarker.png')}
               >
                 <Callout tooltip>
-                  <Tooltip location={location} />
+                  <Tooltip location={location} placeName={name} />
                 </Callout>
               </Marker>
-            );
-          })}
-        </MapView>
-        <Text style={styles.title}>{address}</Text>
-        <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-        <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-      </View>
-    );
+            ))}
+          </MapView>
+          <Text style={styles.title}>{address}</Text>
+          <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+          <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+        </View>
+      );
 }
 
 const styles = StyleSheet.create({
