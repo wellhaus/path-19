@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-
+import { Icon } from 'react-native-elements'
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
@@ -31,14 +31,22 @@ export default function BottomTabNavigator() {
           name="TabOne"
           component={TabOneNavigator}
           options={{
-            tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+            tabBarIcon: ({ }) => <Icon
+            name='explore'
+            type='material'
+            color='#517fa4'
+          />,
           }}
         />
         <BottomTab.Screen
           name="Self-Report"
           component={TabTwoNavigator}
           options={{
-            tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+            tabBarIcon: () => <Icon
+            name='login'
+            type='material'
+            color='#517fa4'
+          />,
           }}
         />
       </BottomTab.Navigator>
