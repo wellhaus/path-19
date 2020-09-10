@@ -8,6 +8,14 @@ import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { MY_IP } from '../ip.js';
+
+const client = new ApolloClient({
+  uri: MY_IP,
+  cache: new InMemoryCache()
+});
+
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -15,24 +23,27 @@ export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
-    <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
-      <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-        }}
-      />
-    </BottomTab.Navigator>
+    <ApolloProvider client={client}>
+      <BottomTab.Navigator
+        initialRouteName="TabOne"
+        tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+        <BottomTab.Screen
+          name="TabOne"
+          component={TabOneNavigator}
+          options={{
+            tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          }}
+        />
+        <BottomTab.Screen
+          name="Self-Report"
+          component={TabTwoNavigator}
+          options={{
+            tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          }}
+        />
+      </BottomTab.Navigator>
+    </ApolloProvider>
+
   );
 }
 
@@ -66,7 +77,7 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="TabTwoScreen"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: 'Log In' }}
       />
     </TabTwoStack.Navigator>
   );
