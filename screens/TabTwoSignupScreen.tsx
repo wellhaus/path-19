@@ -25,12 +25,14 @@ export default function TabTwoLoginScreen({ setLogin } : props) {
 		try {
 			const { email, password, firstname, lastname } = await formData;
 			await register({ variables: { email, password, firstname, lastname, status: true } })
-			console.log("token", data)
-			console.log(formData)
-			setLogin(true)
+			// console.log("token", data)
+			// console.log(formData)
 		} catch (error) {
 			console.log(error)
-		}	
+		}	finally {
+			// console.log(data.register.token)
+			setLogin(true)
+		}
 	}
   return (
     <>

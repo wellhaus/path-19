@@ -45,7 +45,7 @@ const typeDefs: any = gql`
   # Mutation type defines entry points for write operations
   type Mutation {
     # if false, add location failed -- check errors
-    addLocation(name: String!, latitude: Int, longitude: Int, onset: String!, date_visited: String!, user_id: Int): UpdateLocation
+    addLocation(name: String!, latitude: Float, longitude: Float, onset: String!, date_visited: String!, user_id: Int): UpdateLocation
     # if false, delete location failed -- check errors
     deleteLocation(locationId: Int!): UpdateLocation
     editLocation(locationId: Int!): UpdateLocation
