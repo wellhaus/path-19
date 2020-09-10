@@ -3,7 +3,13 @@ import { StyleSheet } from 'react-native';
 import { Text, View } from './Themed';
 import * as Location from 'expo-location';
 
-export default function Tooltip({ timestamp }: Location.LocationData) {
+export interface TooltipProps {
+  location: Location.LocationData,
+};
+
+export default function Tooltip({ location }: TooltipProps) {
+  const { timestamp } = location;
+
   return (
     <View>
       <View style={styles.calloutText}>
