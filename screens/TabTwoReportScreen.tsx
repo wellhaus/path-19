@@ -1,26 +1,45 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-// import useFetch from '../hooks/useLogin'
+import { gql, useMutation } from '@apollo/client';
 import { Text, View } from '../components/Themed';
 
-export default function TabTwoReportScreen() {
+interface props {
+	setLogin: Function
+}
+const ADD_LOCATION = gql`
+  mutation AddLocation($name: String!, $longitude: Int!, $latitude: Int!, $onset: String!, $dateVisited: String!) {
+    addLocation(name: $name, longitude: $longitude, latitude: $latitude, onset: $onset, dateVisited: $dateVisited) {
+      name
+			longitude
+			latitude
+			onset
+			dateVisited
+    }
+  }
+`;
+
+export default function TabTwoReportScreen({ setLogin } : props) {
   const { control, handleSubmit, errors } = useForm();
-	// const { response } = useFetch("http://localhost:3000", {})
+	const [addLocation, { data }] = useMutation(ADD_LOCATION)
 	
-	const submitForm = (content) => {
-		console.log(content)
+	const onSubmit = (data : object) => {
+		// addLocation to data base
+		// const { address, longitude, latitude, onset, dateVisted } = data;
+		// addLocation({ variables: { name: address, longitude, latitude, onset, dateVisted } })
+		// setLogin(true)
+		console.log(data)
 	}
 
   return (
     <>
       <View style={styles.container}>
-      <Text style={styles.text}>{"\n\n"}Log in or Sign up{"\n\n"}</Text>
+      <Text style={styles.text}>{"\n"}Self Report{"\n"}</Text>
       <Controller
         control={control}
         render={({ onChange, onBlur, value }) => (
           <>
-          <Text style={styles.text}>User Name</Text>
+          <Text style={styles.text}>Address</Text>
           <TextInput
             style={styles.input}
             onBlur={onBlur}
@@ -29,7 +48,7 @@ export default function TabTwoReportScreen() {
           />
           </>
         )}
-        name="username"
+        name="address"
         rules={{ required: true }}
         defaultValue=""
       />
@@ -40,23 +59,73 @@ export default function TabTwoReportScreen() {
         style={styles.input}
         render={({ onChange, onBlur, value }) => (
           <>
-            <Text style={styles.text}>Password</Text>
+            <Text style={styles.text}>Longitude</Text>
             <TextInput
               style={styles.input}
               onBlur={onBlur}
               onChangeText={value => onChange(value)}
               value={value}
-              secureTextEntry={true}
             />
           </>
         )}
-        name="password"
+        name="longitude"
+        defaultValue=""
+      />
+			<Controller
+        control={control}
+        style={styles.input}
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <Text style={styles.text}>Latitude</Text>
+            <TextInput
+              style={styles.input}
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+            />
+          </>
+        )}
+        name="latitude"
+        defaultValue=""
+      />
+			<Controller
+        control={control}
+        style={styles.input}
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <Text style={styles.text}>Onset</Text>
+            <TextInput
+              style={styles.input}
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+            />
+          </>
+        )}
+        name="onset"
+        defaultValue=""
+      />
+			<Controller
+        control={control}
+        style={styles.input}
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <Text style={styles.text}>Date Visited</Text>
+            <TextInput
+              style={styles.input}
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+            />
+          </>
+        )}
+        name="dateVisited"
         defaultValue=""
       />
        <TouchableOpacity
          style={styles.button}
-         onPress={handleSubmit(submitForm)}>
-        <Text>Log In</Text>
+         onPress={handleSubmit(onSubmit)}>
+        <Text>Submit</Text>
        </TouchableOpacity>
     </View>
     </>

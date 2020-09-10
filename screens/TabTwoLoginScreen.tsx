@@ -1,27 +1,49 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-// import useFetch from '../hooks/useLogin'
-
+import { gql, useMutation } from '@apollo/client';
 import { Text, View } from '../components/Themed';
 
 interface props {
-	setLogin: Function
+	setLogin: Function,
+	setRegister: Function
 }
 
+const ADD_LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      email
+			password
+    }
+  }
+`;
 
-export default function TabTwoLoginScreen({ setLogin } : props) {
+export default function TabTwoLoginScreen({ setLogin, setRegister } : props) {
   const { control, handleSubmit, errors } = useForm();
-	// const [loggedIn, setLogin] = useState(true);
-	// const { response } = useFetch("http://localhost:3000", {})
+	const [login, { data }] = useMutation(ADD_LOGIN)
+
 	
-	const login = (something) => {
-		console.log(something)
+	const onSubmit = (data : object) => {
+		// const { email, password } = data;
+		// login({ variables: { email, password } })
+		setLogin(true)
+		console.log(data)
 	}
+
+	const redirectSignup = () => {
+		setRegister(true)
+	}
+
   return (
     <>
       <View style={styles.container}>
-      <Text style={styles.text}>{"\n\n"}Log in or Sign up{"\n\n"}</Text>
+      <Text style={styles.text}>{"\n\n"}Log in or </Text>
+			<TouchableOpacity
+         onPress={redirectSignup}>
+        <Text style={styles.text}>Sign up</Text>
+      </TouchableOpacity>
+			<Text>{"\n\n"}</Text>
+
       <Controller
         control={control}
         render={({ onChange, onBlur, value }) => (
@@ -61,7 +83,7 @@ export default function TabTwoLoginScreen({ setLogin } : props) {
       />
        <TouchableOpacity
          style={styles.button}
-         onPress={handleSubmit(login)}>
+         onPress={handleSubmit(onSubmit)}>
         <Text>Log In</Text>
        </TouchableOpacity>
     </View>
@@ -103,5 +125,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 30,
     color: 'black'
+	},
+	link: {
+    fontSize: 30,
+    color: 'blue'
   },
 });

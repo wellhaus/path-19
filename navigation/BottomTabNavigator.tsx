@@ -11,7 +11,7 @@ import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'https://48p1r2roz4.sse.codesandbox.io',
+  uri: 'http://localhost:3000',
   cache: new InMemoryCache()
 });
 
@@ -22,26 +22,27 @@ export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
-    <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
-      <ApolloProvider client={client}>
-      <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Self-Report"
-        component={TabTwoNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-        }}
-      />
-      </ApolloProvider>
-    </BottomTab.Navigator>
+    <ApolloProvider client={client}>
+      <BottomTab.Navigator
+        initialRouteName="TabOne"
+        tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+        <BottomTab.Screen
+          name="TabOne"
+          component={TabOneNavigator}
+          options={{
+            tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          }}
+        />
+        <BottomTab.Screen
+          name="Self-Report"
+          component={TabTwoNavigator}
+          options={{
+            tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          }}
+        />
+      </BottomTab.Navigator>
+    </ApolloProvider>
+
   );
 }
 
