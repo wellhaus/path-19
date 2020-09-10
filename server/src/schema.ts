@@ -53,6 +53,7 @@ const typeDefs: any = gql`
     addLocation(name: String!, latitude: Int, longitude: Int, onset: String!, dateVisited: String!): UpdateLocation
     # if false, delete location failed -- check errors
     deleteLocation(locationId: Int!): UpdateLocation
+    editLocation(locationId: Int!): UpdateLocation
     register(email: String!, password: String!): LoginResponse
     login(email: String!, password: String!): LoginResponse
   }

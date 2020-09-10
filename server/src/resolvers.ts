@@ -85,8 +85,11 @@ export const resolvers = {
       const queryText = `INSERT INTO 
                         Locations (name, latitude, longitude, onset, dateVisited) 
                         VALUES ($1, $2, $3, $4, $5)`;
+      const queryParams = [name, latitude, longitude, onset, dateVisited];
       try {
-        await model.query(queryText, [name, latitude, longitude, onset, dateVisited]);
+        await model.query(queryText, queryParams);
+        // if successful, query will edit single item in database
+        console.log(`${name} successfully added to database.`);
       } catch (err) {
         console.log('Error in addLocation resolver: ', err);
         return err;
@@ -100,19 +103,38 @@ export const resolvers = {
     //   dateVisited: '2020-06-01'){
     // } 
     deleteLocation: async (root, data) => {
-      const { _id } = data;
+      const { _id, name } = data;
       const queryText = `DELETE FROM public.locations
                         WHERE locations._id = ${_id};`
-
       try {
         await model.query(queryText, _id);
+        // if successful, query will edit single item in database
+        console.log(`Location Number ${_id} - ${name} successfully deleted in database.`);
       } catch (err) {
         console.log('Error in deleteLocation resolver: ', err);
         return err;
       }
+    },
 
+    editLocation: async (root, data) => {
+      const { _id, name, latitude, longitude, onset, dateVisited } = data;
+      const queryText = `UPDATE public.locations
+                        SET 
+                        name = 'Keane Coffee',
+                        longitude = 50,
+                        latitude = 50
+                        WHERE locations._id = ${_id};`
+      const queryParams = [name, latitude, longitude, onset, dateVisited];
+      try {
+        await model.query(queryText, queryParams);
+        // if successful, query will edit single item in database
+        console.log(`Location Number ${_id} - ${name} successfully edited in database.`);
+      } catch (err) {
+        console.log('Error in updateLocation resolver: ', err);
+        return err;
+      }
+    },
 
-    }
 
     /* Register */
     //  register: async (root, {email, password}) => {
