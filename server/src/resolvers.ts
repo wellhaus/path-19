@@ -47,17 +47,17 @@ const locationReducer = (location) => {
 // Resolvers define the technique for fetching the types defined in the schema.
 export const resolvers = {
   Query: {
-/* client-side query */
-//  query GetLocations {
-//      locations {
-//    			_id
-//    			name
-//    			longitude
-//    			latitude
-//    			onset
-//    			dateVisited
-//      }
-//    }
+    /* client-side query */
+    //  query GetLocations {
+    //      locations {
+    //    			_id
+    //    			name
+    //    			longitude
+    //    			latitude
+    //    			onset
+    //    			dateVisited
+    //      }
+    //    }
     locations: async () => {
       const queryText = 'SELECT * FROM Locations'
       try {
@@ -85,28 +85,28 @@ export const resolvers = {
               }
       }
     */
-       addLocation: async (root, data) => {
-      const {name, latitude, longitude, onset, date_visited, user_id} = data;
+    addLocation: async (root, data) => {
+      const { name, latitude, longitude, onset, date_visited, user_id } = data;
       console.log('Data in addLocation', data)
-         const queryText = `INSERT INTO 
+      const queryText = `INSERT INTO 
                             Locations (name,latitude,longitude,onset,dateVisited,user_id) 
                             VALUES ($1,$2,$3,$4,$5,$6)`;
-         try {
-         await model.query(queryText, [name, latitude, longitude, onset, date_visited, user_id]);
-         return { success: true, message: `${name} successfully added to locations.`, } 
-       }  catch (err) {
-         console.log('Error in addLocation resolver:', err);
-         return err;
-       }
-        },
+      try {
+        await model.query(queryText, [name, latitude, longitude, onset, date_visited, user_id]);
+        return { success: true, message: `${name} successfully added to locations.`, }
+      } catch (err) {
+        console.log('Error in addLocation resolver:', err);
+        return err;
+      }
+    },
 
     // client-side mutation is:
-//     mutation deleteLocation{
-//       deleteLocation(locationId: 4) {
-// success
-// message
-// }
-//    }
+    //     mutation deleteLocation{
+    //       deleteLocation(locationId: 4) {
+    // success
+    // message
+    // }
+    //    }
     deleteLocation: async (root, data) => {
       const { locationId } = data;
       const queryText = `DELETE FROM public.locations
@@ -122,7 +122,7 @@ export const resolvers = {
       }
     },
 
-// EDIT LOCATION MUTATION HAS NOT BEEN TESTED
+    // EDIT LOCATION MUTATION HAS NOT BEEN TESTED
     editLocation: async (root, data) => {
       const { _id, name, latitude, longitude, onset, dateVisited } = data;
       const queryText = `UPDATE public.locations
@@ -155,21 +155,22 @@ export const resolvers = {
     // }
 
     register: async (root, data) => {
-      const {email, password, firstname, lastname, status} = data;
+      const { email, password, firstname, lastname, status } = data;
       const insertQuery = `INSERT INTO Users (email,password,firstname,lastname,status) 
                                 VALUES ($1,$2,$3,$4,$5)`;
       const findQuery = 'SELECT * FROM Users WHERE email=$1';
       const hashedPassword = await bcrypt.hash(password, 10);
       try {
-          // add user
-          await model.query(insertQuery, [email, hashedPassword, firstname, lastname, status]);
-          // find added user
-          const { user } = await model.query(findQuery, [email]);
-          // add token to user - not sure that we'll need this *
-          const token = jwt.sign({ email: user.email }, TOKEN_SECRET);
-          return { token, user };
-      } catch (err){
-          console.log ('Error in register:', err)
+        // add user
+        await model.query(insertQuery, [email, hashedPassword, firstname, lastname, status]);
+        // find added user
+        const user = await model.query(findQuery, [email]);
+        // add token to user - not sure that we'll need this *
+        const token = jwt.sign({ email: user.email }, TOKEN_SECRET);
+        return { token, user };
+      } catch (err) {
+        console.log('Error in register:', err);
+        return err;
       }
     },
 
@@ -179,28 +180,30 @@ export const resolvers = {
     //   login(email: "h@hi.com", password: "helloworld", 
     //    ) {
     //     token
-    //     user
+    //     user {
+    //      email
+    //     }
     //   }
     // }
 
-     login: async (root, {email, password}) => {
+    login: async (root, { email, password }) => {
       const findQuery = 'SELECT * FROM Users WHERE email=$1';
-    try {
-   // * find user in db *
-      const res = await model.query(findQuery, [email]);
-      const [user] = res.rows;
-      if (!user) throw new Error('Cannot find user in database');
-      // * check for matching password *
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) throw new Error('Invalid password')
-      // on success
-      const token = jwt.sign({ email: user.email}, TOKEN_SECRET);
-      return { token, user };
-      // handle any other error
-    } catch (err) {
-      console.log('Error in login:', err)
-      return err;
-    }
+      try {
+        // * find user in db *
+        const res = await model.query(findQuery, [email]);
+        const [user] = res.rows;
+        if (!user) throw new Error('Cannot find user in database');
+        // * check for matching password *
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) throw new Error('Invalid password')
+        // on success
+        const token = jwt.sign({ email: user.email }, TOKEN_SECRET);
+        return { token, user };
+        // handle any other error
+      } catch (err) {
+        console.log('Error in login:', err)
+        return err;
+      }
     }
   },
 }
