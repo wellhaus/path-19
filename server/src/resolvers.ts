@@ -127,7 +127,7 @@ export const resolvers = {
       }
     },
 
-
+// EDIT LOCATION MUTATION HAS NOT BEEN TESTED
     editLocation: async (root, data) => {
       const { _id, name, latitude, longitude, onset, dateVisited } = data;
       const queryText = `UPDATE public.locations
@@ -149,6 +149,16 @@ export const resolvers = {
 
 
     /* Register */
+    // client-side mutation:
+    // mutation register {
+    //   register(email: "h@hi.com", password: "helloworld", 
+    //     firstname: "Me", lastname: "You", 
+    //     status: false) {
+    //     token
+    //     user
+    //   }
+    // }
+
      register: async (root, data) => {
     const {email, password, firstname, lastname, status} = data;
     const insertQuery = `INSERT INTO Users (email,password,firstname,lastname,status) 
@@ -166,17 +176,39 @@ export const resolvers = {
      } catch (err){
         console.log ('Error in register:', err)
      }
+
+
     /* Login */
-    //  login: async (root, {email, password}) => {
-    // * find user in db *
-    // const user = await model.query(findQuery, [username]);
-    // if (!user) throw new Error('Cannot find user in database')
-    // * check for matching password *
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) throw new Error('Invalid password')
-    // const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
-    // return { token, user };
+    // CLIENT-SIDE QUERY:
+    // mutation login {
+    //   login(email: "h@hi.com", password: "helloworld", 
+    //    ) {
+    //     token
+    //     user
+    //   }
     // }
+
+     login: async (root, {email, password}) => {
+       // TODO: complete find query
+      const findQuery = 'SELECT * from Users WHERE'
+    try {
+   // * find user in db *
+      const user = await model.query(findQuery, [email]);
+      if (!user) throw new Error('Cannot find user in database');
+      // * check for matching password *
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) throw new Error('Invalid password')
+      // on success
+      const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
+      return { token, user };
+      // handle any other error
+    } catch (err) {
+      console.log('Error in login:', err)
+    }
+    }
   },
 }
 }
+
+
+// if (!user) throw new Error('Cannot find user in database')

@@ -1,5 +1,5 @@
 -- DROP TABLE IF EXISTS public.users;
-DROP TABLE public.users (
+CREATE TABLE public.users (
 	"_id" serial NOT NULL,
 	"email" varchar UNIQUE NOT NULL,
   "password" varchar NOT NULL,
@@ -12,7 +12,7 @@ DROP TABLE public.users (
 );
 
 -- DROP TABLE IF EXISTS public.locations;
-DROP TABLE public.locations (
+CREATE TABLE public.locations (
   "_id" serial NOT NULL,
   "name" varchar NOT NULL,
   "latitude" integer NOT NULL,
@@ -45,3 +45,5 @@ DROP TABLE public.locations (
  select setval('public.users__id_seq', 5, false);
  select setval('public.locations__id_seq', 9, false);
 
+-- DROP TABLE public.locations;
+-- DROP TABLE public.users
