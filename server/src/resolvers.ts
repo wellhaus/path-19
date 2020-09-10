@@ -22,10 +22,29 @@ export const resolvers = {
        } 
   },
   Mutation: {
-    /* Add a Location */
-      //  addLocation: async () => {
-      //    const queryText = 'INSERT'
-      //  }
+    /* Add a Location 
+          client-side mutation will look something like:
+                mutation addLocation {
+                 updateUserEmail(name: 'Benny', longitude: '234234.24, 
+                 latitude: 23523.9023, onset: '2020-06-06', 
+                 dateVisited: '2020-06-01'){
+              }
+      }
+    */
+
+    // data is an object that contains all GraphQL arguments provided for this field
+       addLocation: async (root, data) => {
+      const {name, longitude, latitude, onset, dateVisited} = data;
+         const queryText = `INSERT INTO 
+                            Locations (name,longitude,latitude,onset,dateVisited) 
+                            VALUES ($1,$2,$3,$4,$5)`;
+         try {
+         await model.query(queryText, [name, longitude, latitude, onset, dateVisited]);
+       }  catch (err) {
+         console.log('Error in addLocation resolver:', err);
+         return err;
+       }
+        }
     /* Register */
     //  register: async (root, {email, password}) => {
     // const insertQuery = 'INSERT INTO Users (email, password) VALUES ($1,$2)';
