@@ -5,6 +5,7 @@ import { Text, View } from './Themed';
 export interface LoadingViewProps {
   message?: string,
 }
+
 export default function LoadingView({ message }: LoadingViewProps) {
   const [displayMsg, setDisplayMsg] = useState("Gathering most up-to-date reports...")
 
