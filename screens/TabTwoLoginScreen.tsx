@@ -23,12 +23,13 @@ export default function TabTwoLoginScreen({ setLogin, setRegister } : props) {
 	const [login, { data }] = useMutation(ADD_LOGIN)
 
 	
-	const onSubmit = async (data: any) => {
+	const onSubmit = async (formData: any) => {
 		try {
-			const { email, password } = await data;
+			const { email, password } = await formData;
 			await login({ variables: { email, password } })
+			console.log(formData)
+			console.log("token: ", data)
 			setLogin(true)
-			console.log(data)
 		} catch(error) {
 			console.log('error: ', error)
 		}

@@ -9,9 +9,10 @@ import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { MY_IP } from '../ip.js';
 
 const client = new ApolloClient({
-  uri: 'http://192.168.2.112:5000/',
+  uri: MY_IP,
   cache: new InMemoryCache()
 });
 
