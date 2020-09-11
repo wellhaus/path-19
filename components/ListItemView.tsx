@@ -11,17 +11,12 @@ export interface ListItemViewProps {
 };
 
 export default function ListItemView({ placeItem }: ListItemViewProps) {
-  // Simplify visit timestamp to just day, month, date, year
-  const visitedTimestamp = placeItem.timestamp === 0 ?
-    "No date provided" :
-    new Date(placeItem.timestamp).toString().split(' ').slice(0, 4).join(' ');
-
   return (
     <View style={styles.container}>
       <View style={styles.item}>
         <Text style={styles.itemCol}>{placeItem.name}</Text>
         <Text style={styles.itemCol}>{convertDistance(placeItem.proximity, 'mi').toFixed(2) + " mi"}</Text>
-        <Text style={styles.itemCol}>{visitedTimestamp}</Text>
+        <Text style={styles.itemCol}>{placeItem.date_visited}</Text>
       </View>
     </View>
   )
@@ -37,7 +32,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   item: {
-    paddingVertical: 5,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
