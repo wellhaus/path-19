@@ -12,8 +12,10 @@ interface props {
 const ADD_LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      email
-			password
+			token
+			user {
+         email
+      }
     }
   }
 `;
@@ -22,16 +24,14 @@ export default function TabTwoLoginScreen({ setLogin, setRegister } : props) {
   const { control, handleSubmit, errors } = useForm();
 	const [login, { data }] = useMutation(ADD_LOGIN)
 
-	
 	const onSubmit = async (formData: any) => {
 		try {
 			const { email, password } = await formData;
 			await login({ variables: { email, password } })
-			console.log(formData)
-			console.log("token: ", data)
-			setLogin(true)
 		} catch(error) {
 			console.log('error: ', error)
+		} finally {
+			setLogin(true)
 		}
 		
 	}
