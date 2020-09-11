@@ -10,6 +10,7 @@ import LoadingView from '../components/LoadingView';
 import ListView from '../components/ListView';
 import { LocationSchema } from '../constants/Types';
 import Geocoder from 'react-native-geocoder';
+import { useQuery, gql } from '@apollo/client';
 
 // Fallback strategy: Some Geocoding services might not be included in a device
 // Geocoder.fallbackToGoogle(API_KEY);
@@ -18,6 +19,19 @@ export default function TabOneScreen() {
   const [location, setLocation] = useState<Location.LocationData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [allLocations, setAllLocations] = useState<LocationSchema[]>([]);
+
+  const GET_LOCATIONS = gql`
+  query GetLocations {
+  locations {
+    _id
+    name
+    latitude
+    longitude
+    onset
+    date_visited
+  }
+}`
+  const { loading, error, data } = useQuery(GET_LOCATIONS);
   const _map = useRef(null);
 
   /* GEOCODING OBJECT
@@ -38,7 +52,7 @@ export default function TabOneScreen() {
   */
   // NOTE: Geocoding is resource intensive -> request wisely
   const handleSearch = async (place: string) => {
-    if (_map) {
+    if (_map && place && place.length > 0) {
       try {
         // const targetCoords = await Location.geocodeAsync(place);
         // const { latitude, longitude } = targetCoords[0];
@@ -62,6 +76,20 @@ export default function TabOneScreen() {
   };
 
   useEffect(() => {
+    // Populate locations array with all data from server
+    (async () => {
+      setAllLocations(await data.locations);
+    })();
+
+    // TODO: lazy load locations
+    // Create local cache
+    // Create key using parameters of each new fetch for locations
+    // Store in state along with queried region
+    // Check if last call was done with the same key and with a region wrapping current one
+    // If so, we alreday have all the points to display so ignore request
+  }, [data]);
+
+  useEffect(() => {
     // Get permission to access and display user's current location
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
@@ -70,19 +98,6 @@ export default function TabOneScreen() {
       }
       setLocation(await Location.getCurrentPositionAsync({}));
     })();
-
-    // Populate locations array with all data form server
-    // TODO: lazy load locations
-    // Create local cache
-    // Create key using parameters of each new fetch for locations
-    // Store in state along with queried region
-    // Check if last call was done with the same key and with a region wrapping current one
-    // If so, we alreday have all the points to display so ignore request
-    setAllLocations([{ name: 'Dallas', lat: 32.7767, long: -96.7970, timestamp: 1599670918, proximity: 0 },
-    { name: 'Salt & Straw Venice', lat: 33.9908, long: -118.4660, timestamp: 1599670918, proximity: 0 },
-    { name: 'Miami', lat: 25.7617, long: -80.1918, timestamp: 1599670918, proximity: 0 },
-    { name: 'San Francisco', lat: 37.7749, long: -122.4194, timestamp: 1599670918, proximity: 0 }
-    ]);
   }, []);
 
   return !location ?
@@ -100,10 +115,10 @@ export default function TabOneScreen() {
               longitudeDelta: 0.05
             }}
           >
-            {allLocations.map(({ name, lat, long }, index) => (
+            {allLocations.map(({ _id, name, latitude, longitude }) => (
               <Marker
-                coordinate={{ latitude: lat, longitude: long }}
-                key={"markerKey" + index}
+                coordinate={{ latitude, longitude }}
+                key={"markerKey" + _id}
                 image={require('../assets/images/redAuraMarker.png')}
               >
                 <Callout tooltip>
