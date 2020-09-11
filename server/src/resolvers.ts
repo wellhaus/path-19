@@ -21,7 +21,7 @@ const monthLegend = {
 }
 const monthName = (index) => monthLegend[index];
 
-// Return custom date for onset and dateVisited keys
+// Return custom date for onset and date_visited keys
 const locationReducer = (location) => {
   const onsetDate = new Date(location.onset)
   const onsetYear = onsetDate.getFullYear();
@@ -55,7 +55,7 @@ export const resolvers = {
     //    			longitude
     //    			latitude
     //    			onset
-    //    			dateVisited
+    //    			date_visited
     //      }
     //    }
     locations: async () => {
@@ -78,7 +78,7 @@ export const resolvers = {
               mutation AddLocation {
                  addLocation(name: "Urrth Cafe", longitude: 234234, 
                  latitude: 23523, onset: "2020-06-06", 
-                 dateVisited: "2020-06-01", user_id: 10) {
+                 date_visited: "2020-06-01", user_id: 10) {
            success
            message
            }
@@ -89,7 +89,7 @@ export const resolvers = {
       const { name, latitude, longitude, onset, date_visited, user_id } = data;
       console.log('Data in addLocation', data)
       const queryText = `INSERT INTO 
-                            Locations (name,latitude,longitude,onset,dateVisited,user_id) 
+                            Locations (name,latitude,longitude,onset,date_visited,user_id) 
                             VALUES ($1,$2,$3,$4,$5,$6)`;
       try {
         await model.query(queryText, [name, latitude, longitude, onset, date_visited, user_id]);
@@ -124,14 +124,14 @@ export const resolvers = {
 
     // EDIT LOCATION MUTATION HAS NOT BEEN TESTED
     editLocation: async (root, data) => {
-      const { _id, name, latitude, longitude, onset, dateVisited } = data;
+      const { _id, name, latitude, longitude, onset, date_visited } = data;
       const queryText = `UPDATE public.locations
                         SET 
                         name = 'Keane Coffee',
                         longitude = 50,
                         latitude = 50
                         WHERE locations._id = ${_id};`
-      const queryParams = [name, latitude, longitude, onset, dateVisited];
+      const queryParams = [name, latitude, longitude, onset, date_visited];
       try {
         await model.query(queryText, queryParams);
         // if successful, query will edit single item in database
