@@ -39,9 +39,9 @@ export default function TabTwoReportScreen({ setLogin } : props) {
 			await addLocation(obj)
 		} catch (error) {
 			console.log(error)
-		}	finally {
-			setLogin(data.addLocation.success)
-		}
+		}	/*finally {
+			setLogin(await data.addLocation.success)
+		} */
 	}
 
   return (
