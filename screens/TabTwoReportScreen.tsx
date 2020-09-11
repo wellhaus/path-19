@@ -7,14 +7,21 @@ import { Text, View } from '../components/Themed';
 interface props {
 	setLogin: Function
 }
+
+// mutation AddLocation {
+//    addLocation(name: "Uasfsadrrth Cafe", longitude: -234234, 
+//    latitude: 23523, onset: "2020-06-06", 
+//    date_visited: "2020-06-01", user_id: 2) {
+//      success
+//      message
+//    }
+// }
+
 const ADD_LOCATION = gql`
-  mutation AddLocation($name: String!, $longitude: Int!, $latitude: Int!, $onset: String!, $dateVisited: String!) {
-    addLocation(name: $name, longitude: $longitude, latitude: $latitude, onset: $onset, dateVisited: $dateVisited) {
-      name
-			longitude
-			latitude
-			onset
-			dateVisited
+  mutation AddLocation($name: String!, $longitude: Float!, $latitude: Float!, $onset: String!, $date_visited: String!, $user_id: Int!) {
+    addLocation(name: $name, longitude: $longitude, latitude: $latitude, onset: $onset, date_visited: $date_visited, user_id: $user_id) {
+      success
+     	message
     }
   }
 `;
@@ -23,12 +30,18 @@ export default function TabTwoReportScreen({ setLogin } : props) {
   const { control, handleSubmit, errors } = useForm();
 	const [addLocation, { data }] = useMutation(ADD_LOCATION)
 	
-	const onSubmit = (data : object) => {
-		// addLocation to data base
-		// const { address, longitude, latitude, onset, dateVisted } = data;
-		// addLocation({ variables: { name: address, longitude, latitude, onset, dateVisted } })
-		// setLogin(true)
-		console.log(data)
+	const onSubmit = async (formData : any) => {
+		try {
+			console.log(formData)
+			const { address, longitude, latitude, onset, date_visited } = formData;
+			const obj = { variables: { name: address, longitude: Number(longitude), latitude: Number(latitude), onset, date_visited, user_id: 2} }
+			console.log("obj", obj)
+			await addLocation(obj)
+		} catch (error) {
+			console.log(error)
+		}	finally {
+			setLogin(data.addLocation.success)
+		}
 	}
 
   return (
@@ -119,7 +132,7 @@ export default function TabTwoReportScreen({ setLogin } : props) {
             />
           </>
         )}
-        name="dateVisited"
+        name="date_visited"
         defaultValue=""
       />
        <TouchableOpacity
