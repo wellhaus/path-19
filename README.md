@@ -102,7 +102,7 @@ npm install npm@latest -g
 1. Fork the repo
 2. Clone the repo
 ```sh
-git clone https://github.com/your_username_/path-19.git
+git clone https://github.com/wellhaus/path-19.git
 ```
 3. Install NPM packages
 ```sh
