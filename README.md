@@ -42,7 +42,7 @@
     <!-- <a href="https://github.com/wellhaus/path-19.git"><strong>Docs coming soon!</strong></a> -->
     <br />
     <br />
-    <a href="https://github.com/wellhaus/path-19.git">Demo coming soon!</a>
+<!--     <a href="https://github.com/wellhaus/path-19.git">Demo coming soon!</a> -->
     ·
     <a href="https://github.com/wellhaus/path-19.git/issues">Report Bug</a>
     ·
