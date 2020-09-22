@@ -25,10 +25,10 @@ export default function BottomTabNavigator() {
   return (
     <ApolloProvider client={client}>
       <BottomTab.Navigator
-        initialRouteName="TabOne"
+        initialRouteName="Cases"
         tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
         <BottomTab.Screen
-          name="TabOne"
+          name="Cases"
           component={TabOneNavigator}
           options={{
             tabBarIcon: ({ }) => <Icon
