@@ -33,8 +33,12 @@
   <!-- <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
-
-  <h3 align="center">Path-19</h3>
+ <p align="center">
+  <img
+    alt="path-19 logo"
+    src="./assets/screenshots/logo.png"
+  />
+     </p>
 
   <p align="center">
     A self-report COVID-19 contact tracing app
