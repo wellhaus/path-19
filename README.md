@@ -42,7 +42,7 @@
     <!-- <a href="https://github.com/wellhaus/path-19.git"><strong>Docs coming soon!</strong></a> -->
     <br />
     <br />
-    <a href="https://github.com/wellhaus/path-19.git">Demo coming soon!</a>
+<!--     <a href="https://github.com/wellhaus/path-19.git">Demo coming soon!</a> -->
     ·
     <a href="https://github.com/wellhaus/path-19.git/issues">Report Bug</a>
     ·
@@ -57,16 +57,11 @@
 
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  <!-- * [Prerequisites](#prerequisites) -->
   * [Installation](#installation)
 * [Usage](#usage)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
-* [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
-
 
 
 <!-- ABOUT THE PROJECT -->
@@ -119,8 +114,9 @@ expo start
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-View reported cases in the map or list view.
-|![Path-19 map view screenshot](./assets/screenshots/map-ss.png)
+View reported cases in the map or list view.     <br />
+<img src="./assets/screenshots/map-ss.png" alt="Path-19 map view screenshot" width="300"> <br />
+
 To self-report, sign up for a free account (accessed via the bottom right nav tab). Path-19 will keep all of your personal information confidential. Only the location visits you disclose will be made public.
 
 <!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
@@ -143,7 +139,7 @@ Contributions are what make the open source community such an amazing place to b
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. Open a Pull Request to the path-19 staging branch
 
 
 
