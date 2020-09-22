@@ -37,9 +37,9 @@
   <h3 align="center">Path-19</h3>
 
   <p align="center">
-    A self-report COVID-19 tracer
+    A self-report COVID-19 contact tracing app
     <br />
-    <a href="https://github.com/wellhaus/path-19.git"><strong>Docs coming soon!</strong></a>
+    <!-- <a href="https://github.com/wellhaus/path-19.git"><strong>Docs coming soon!</strong></a> -->
     <br />
     <br />
     <a href="https://github.com/wellhaus/path-19.git">Demo coming soon!</a>
@@ -73,8 +73,7 @@
 ## About The Project
 
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
-
-Coming soon!
+Path-19 was created to promote transparency and accountability around COVID-19 cases in the US. The project is currently in Beta.
 
 ### Built With
 
@@ -85,9 +84,8 @@ Coming soon!
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+<!-- ## Getting Started -->
 
-Coming soon!
 
 <!-- ### Prerequisites
 
@@ -102,15 +100,18 @@ npm install npm@latest -g
 1. Fork the repo
 2. Clone the repo
 ```sh
-git clone https://github.com/your_username_/path-19.git
+git clone https://github.com/wellhaus/path-19.git
 ```
-3. Install NPM packages
+3. Start server
 ```sh
 npm install
 ```
-4. npm start
+```sh
+npm run dev
+```
+4. Start the app
 ```JS
-npm start
+expo start
 ```
 
 
@@ -118,7 +119,9 @@ npm start
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Screenshots and demos coming soon.
+View reported cases in the map or list view.
+|![Default Filepath](./assets/screenshots/map-ss.png)
+To self-report, sign up for a free account (accessed via the bottom right nav tab). Path-19 will keep all of your personal information confidential. Only the location visits you disclose will be made public.
 
 <!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
 
@@ -152,9 +155,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 
 <!-- CONTACT -->
-## Contact
+<!-- ## Contact
 
-Coming soon!
+Coming soon! -->
 
 <!-- Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
 
@@ -163,9 +166,9 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 
 
 <!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
+<!-- ## Acknowledgements
 
-Coming soon!
+Coming soon! -->
 
 <!-- * [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 * [Img Shields](https://shields.io)

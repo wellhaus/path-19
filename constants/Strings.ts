@@ -1,4 +1,4 @@
 
-export const PLACE_NAME_HEADER = "Name of Place";
+export const PLACE_NAME_HEADER = "Location";
 export const PROXIMITY_HEADER = "Proximity";
-export const LAST_VISITED_HEADER = "Last Visited";
+export const LAST_VISITED_HEADER = "Visited";
