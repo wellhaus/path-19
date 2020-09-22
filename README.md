@@ -119,8 +119,9 @@ expo start
 ## Usage
 
 View reported cases in the map or list view.     <br />
+<p align="center">
 <img src="./assets/screenshots/map-ss.png" alt="Path-19 map view screenshot" width="300"> <br />
-
+     </p>
 To self-report, sign up for a free account (accessed via the bottom right nav tab). Path-19 will keep all of your personal information confidential. Only the location visits you disclose will be made public.
 
 <!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
