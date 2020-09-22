@@ -33,8 +33,12 @@
   <!-- <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
-
-  <h3 align="center">Path-19</h3>
+ <p align="center">
+  <img
+    alt="path-19 logo"
+    src="./assets/screenshots/logo.png"
+  />
+     </p>
 
   <p align="center">
     A self-report COVID-19 contact tracing app
@@ -115,9 +119,10 @@ expo start
 ## Usage
 
 View reported cases in the map or list view.     <br />
+<p align="center">
 <img src="./assets/screenshots/map-ss.png" alt="Path-19 map view screenshot" width="300"> <br />
-
-To self-report, sign up for a free account (accessed via the bottom right nav tab). Path-19 will keep all of your personal information confidential. Only the location visits you disclose will be made public.
+     </p>
+To self-report, sign up for a free account (accessed via the bottom right nav tab). Path-19 will keep all of your personal information confidential. Only the location visits you choose to disclose will be made public.
 
 <!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
 
