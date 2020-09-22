@@ -57,15 +57,15 @@
 
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  <!-- * [Prerequisites](#prerequisites) -->
+  <!--* [Getting Started](#getting-started)
+ * [Prerequisites](#prerequisites) -->
   * [Installation](#installation)
 * [Usage](#usage)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
-* [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
+  <!-- * [Contact](#contact)
+* [Acknowledgements](#acknowledgements)  -->
 
 
 
@@ -119,7 +119,7 @@ expo start
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-View reported cases in the map or list view.
+View reported cases in the map or list view.     <br />
 <img src="./assets/screenshots/map-ss.png" alt="Path-19 map view screenshot" width="300"> <br />
 To self-report, sign up for a free account (accessed via the bottom right nav tab). Path-19 will keep all of your personal information confidential. Only the location visits you disclose will be made public.
 
